@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Soham Sahasrabuddhe</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Quick inline style for hiding sections */
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -14,20 +23,25 @@
     </header>
 
     <nav>
-        <a href="#about">About Me</a>
-        <a href="#hobbies">Hobbies</a>
-        <a href="#projects">Projects</a>
-        <a href="#Quizzing">Quizzing</a>
-        <a href="#contact">Contact</a>
+        <a href="#about" onclick="showTab(event, 'about')">About Me</a>
+        <a href="#hobbies" onclick="showTab(event, 'hobbies')">Hobbies</a>
+        <a href="#projects" onclick="showTab(event, 'projects')">Projects</a>
+        <a href="#quizzing" onclick="showTab(event, 'quizzing')">Quizzing</a>
+        <a href="#contact" onclick="showTab(event, 'contact')">Contact</a>
     </nav>
 
     <div class="container">
-        <section id="about">
+        <section id="about" class="tab-content active">
             <h2>About Me</h2>
             <p>Hello! I am Soham Sahasrabuddhe, a sophomore in Engineering Physics at IIT Bombay. I am passionate about physics, maths, rockets, machine learning, data science, and quantitative finance. I enjoy exploring new domains and working on projects that combine my technical knowledge with real-world applications.</p>
         </section>
 
-        <section id="projects">
+        <section id="hobbies" class="tab-content">
+            <h2>Hobbies</h2>
+            <p>Some of my hobbies include reading science fiction, playing the guitar, and participating in quizzes and competitions.</p>
+        </section>
+
+        <section id="projects" class="tab-content">
             <h2>Projects</h2>
             <ul>
                 <li><strong>IPL Match Predictor:</strong> A machine learning model predicting outcomes and scores for IPL matches using LSTM and regression models.</li>
@@ -36,7 +50,12 @@
             </ul>
         </section>
 
-        <section id="contact">
+        <section id="quizzing" class="tab-content">
+            <h2>Quizzing</h2>
+            <p>I have participated in various science and technology quizzes at national and international levels, winning multiple awards.</p>
+        </section>
+
+        <section id="contact" class="tab-content">
             <h2>Contact Me</h2>
             <p>Feel free to reach out if you want to collaborate or discuss exciting projects!</p>
             <ul>
@@ -50,5 +69,14 @@
     <footer>
         <p>&copy; 2024 Soham Sahasrabuddhe. All Rights Reserved.</p>
     </footer>
+
+    <script>
+        function showTab(event, tabId) {
+            event.preventDefault();
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+        }
+    </script>
 </body>
 </html>
