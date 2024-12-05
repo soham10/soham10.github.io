@@ -1,17 +1,26 @@
 body {
-    font-family: 'Courier New', Courier, monospace;
+    font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    color: #e0e0e0;
-    background-color: #0a0a23;
+    color: #333;
+    background-color: #ffffff;
 }
 
 header {
-    background: linear-gradient(90deg, #001f54, #003d99);
-    color: white;
+    background: #000000;
+    color: #ffffff;
     padding: 1.5rem 0;
     text-align: center;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+header img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin: 1rem auto;
+    display: block;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
 }
 
 nav {
@@ -20,7 +29,7 @@ nav {
 }
 
 nav a {
-    color: #50c8ff;
+    color: #000000;
     text-decoration: none;
     margin: 0 1rem;
     font-weight: bold;
@@ -28,7 +37,7 @@ nav a {
 }
 
 nav a:hover {
-    color: #1e90ff;
+    color: #555555;
     text-decoration: underline;
 }
 
@@ -36,9 +45,9 @@ nav a:hover {
     max-width: 800px;
     margin: 2rem auto;
     padding: 1rem;
-    background-color: #13134a;
+    background-color: #f9f9f9;
     border-radius: 8px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 section {
@@ -46,15 +55,15 @@ section {
 }
 
 section h2 {
-    color: #50c8ff;
-    border-bottom: 2px solid #1e90ff;
+    color: #000000;
+    border-bottom: 2px solid #333333;
     padding-bottom: 0.5rem;
 }
 
 footer {
     text-align: center;
     padding: 1rem 0;
-    background: #001f54;
-    color: #e0e0e0;
-    border-top: 2px solid #003d99;
+    background: #000000;
+    color: #ffffff;
+    border-top: 2px solid #333333;
 }
