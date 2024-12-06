@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,6 +23,20 @@
             width: 32px;
             height: 32px;
         }
+        .hobby-container {
+            margin-bottom: 15px;
+        }
+        .info {
+            display: none;
+            margin-top: 5px;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
     </style>
 </head>
 <body>
@@ -45,43 +58,84 @@
     <div class="container">
         <section id="about" class="tab-content active">
             <h2>About Me</h2>
-            <p>Hey there! I'm Soham, a so called nerd or whatever they say in gen Z lingo, juggling my love for physics, math, rockets, machine learning, cars, cricket and you. Whether it's solving puzzles, 
-                speed-cubing with my Rubik’s cube, or diving into cool projects that turn nerdy ideas into real-world magic, I’m always up for a challenge. I thrive on trying new things, geeking out over the latest tech, and sparking conversations with awesome people. </p>
+            <p>Hey there! I'm Soham, a so-called nerd (or whatever they say in Gen Z lingo), juggling my love for physics, math, rockets, machine learning, cars, cricket, and you. Whether it's solving puzzles, speed-cubing with my Rubik’s cube, or diving into cool projects that turn nerdy ideas into real-world magic, I’m always up for a challenge. I thrive on trying new things, geeking out over the latest tech, and sparking conversations with awesome people.</p>
             <br>
-            <p> I'm a sophomore student in IIT Bombay, currently pursuing B.Tech in Engineering Physics with honours in Physics and minor in Mathematics. Apart from that, I am a Volunteer at Maths N Physics Club at IITB, and Junior Design Engineer at IITB Rocket Team.
-            <p>Link to my CV is here: <a href="CV.pdf" target="_blank">Download my CV</a></p>
-            </p>
-
+            <p>I'm a sophomore student at IIT Bombay, currently pursuing B.Tech in Engineering Physics with honours in Physics and a minor in Mathematics. Apart from that, I am a Volunteer at the Maths N Physics Club at IITB and a Junior Design Engineer at the IITB Rocket Team.</p>
+            <p>Link to my CV: <a href="CV.pdf" target="_blank">Download my CV</a></p>
         </section>
 
         <section id="life" class="tab-content">
             <h2>Life</h2>
-            <p>
-                Life’s an adventure filled with endless opportunities to learn, grow, and redefine limits. I’m all about diving into new experiences, tackling challenges head-on, and evolving toward both personal and professional awesomeness.
-                
-                Living the IIT Bombay life? It’s been a blast so far—amazing people, brilliant minds, and a campus that’s straight out of a dream. Hostels can be underwhelming, but the culture is not. Anyways, what’s not to love? </p>
+            <p>Life’s an adventure filled with endless opportunities to learn, grow, and redefine limits. I’m all about diving into new experiences, tackling challenges head-on, and evolving toward both personal and professional awesomeness.</p>
+            <p>Living the IIT Bombay life? It’s been a blast so far—amazing people, brilliant minds, and a campus that’s straight out of a dream. Hostels can be underwhelming, but the culture is not. Anyways, what’s not to love?</p>
             <h2>My Location</h2>
-                <iframe
-                    src="https://www.google.com/maps/place/Indian+Institute+of+Technology+Bombay/@19.1336104,72.9131041,16.13z/data=!4m6!3m5!1s0x3be7c7f189efc039:0x68fdcea4c5c5894e!8m2!3d19.1330605!4d72.9151061!16zL20vMDE2Yzlo?entry=ttu&g_ep=EgoyMDI0MTIwMy4wIKXMDSoASAFQAw%3D%3D"
-                    width="600"
-                    height="450"
-                    style="border:0;"
-                    allowfullscreen=""
-                    loading="lazy"
-                    referrerpolicy="no-referrer-when-downgrade">
-                </iframe>
-            </section>
+            <iframe
+                width="600"
+                height="450"
+                style="border:0"
+                loading="lazy"
+                allowfullscreen
+                referrerpolicy="no-referrer-when-downgrade"
+                src="https://www.google.com/maps/place/Indian+Institute+of+Technology+Bombay/@19.144144,72.9090628,15z/data=!4m6!3m5!1s0x3be7c7f189efc039:0x68fdcea4c5c5894e!8m2!3d19.1330605!4d72.9151061!16zL20vMDE2Yzlo?entry=ttu&g_ep=EgoyMDI0MTIwMy4wIKXMDSoASAFQAw%3D%3D"></iframe>
+        </section>
+
         <section id="hobbies" class="tab-content">
             <h2>Hobbies</h2>
-            <p>Some of my hobbies include reading science fiction, and participating in quizzes and competitions.</p>
+            <div class="hobby-container">
+                <input type="checkbox" id="fiction-books" onchange="toggleInfo('fiction-info')">
+                <label for="fiction-books">Fiction Books</label>
+                <div id="fiction-info" class="info">
+                    I enjoy exploring different worlds and perspectives through captivating stories in fiction.
+                </div>
+            </div>
+
+            <div class="hobby-container">
+                <input type="checkbox" id="sports" onchange="toggleInfo('sports-info')">
+                <label for="sports">Sports</label>
+                <div id="sports-info" class="info">
+                    I'm a fan of playing and watching sports, especially cricket and football.
+                </div>
+            </div>
+
+            <div class="hobby-container">
+                <input type="checkbox" id="movies" onchange="toggleInfo('movies-info')">
+                <label for="movies">Movies</label>
+                <div id="movies-info" class="info">
+                    I love watching movies, from thrilling blockbusters to indie gems.
+                </div>
+            </div>
+
+            <div class="hobby-container">
+                <input type="checkbox" id="gaming" onchange="toggleInfo('gaming-info')">
+                <label for="gaming">Gaming</label>
+                <div id="gaming-info" class="info">
+                    Gaming is my way to relax and enjoy interactive storytelling and challenges.
+                </div>
+            </div>
+
+            <div class="hobby-container">
+                <input type="checkbox" id="indian-history" onchange="toggleInfo('history-info')">
+                <label for="indian-history">Indian History</label>
+                <div id="history-info" class="info">
+                    Exploring India's rich and diverse history is a passion of mine.
+                </div>
+            </div>
+
+            <div class="hobby-container">
+                <input type="checkbox" id="travelling" onchange="toggleInfo('travelling-info')">
+                <label for="travelling">Travelling</label>
+                <div id="travelling-info" class="info">
+                    I love discovering new places, cultures, and experiences through travel.
+                </div>
+            </div>
         </section>
 
         <section id="projects" class="tab-content">
             <h2>Projects</h2>
             <ul>
                 <li><strong>IPL Match Predictor:</strong> A machine learning model predicting outcomes and scores for IPL matches using LSTM and regression models.</li>
-                <li><strong>Summer of Science:</strong> A machine learning model predicting outcomes and scores for IPL matches using LSTM and regression models.</li>
-                <li><strong>Krittika Summer Project:</strong> A machine learning model predicting outcomes and scores for IPL matches using LSTM and regression models.</li>
+                <li><strong>Summer of Science:</strong> A project focusing on applying machine learning techniques for data analysis and predictions.</li>
+                <li><strong>Krittika Summer Project:</strong> Involved designing and implementing solutions using machine learning algorithms and data analysis.</li>
             </ul>
         </section>
 
@@ -94,7 +148,7 @@
     <footer>
         <p>&copy; 2024 Soham Sahasrabuddhe. All Rights Reserved.</p>
         <div class="social-links">
-            <a href="www.linkedin.com/in/soham-sahasrabuddhe-118901284" target="_blank">
+            <a href="https://www.linkedin.com/in/soham-sahasrabuddhe-118901284" target="_blank">
                 <img src="Images/linkedin.png" alt="LinkedIn">
             </a>
             <a href="https://www.instagram.com/ssoham_10/" target="_blank">
@@ -115,6 +169,11 @@
             const tabs = document.querySelectorAll('.tab-content');
             tabs.forEach(tab => tab.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
+        }
+
+        function toggleInfo(infoId) {
+            const infoDiv = document.getElementById(infoId);
+            infoDiv.style.display = infoDiv.style.display === 'none' || infoDiv.style.display === '' ? 'block' : 'none';
         }
     </script>
 </body>
