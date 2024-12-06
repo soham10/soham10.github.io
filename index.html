@@ -205,7 +205,6 @@
             <h2>Quizzing</h2>
             <p>I have a passion for quizzing and have participated in various quiz competitions, honing my knowledge across different domains such as science, sports, and general knowledge.</p>
         </section>
-
     </div>
 
     <script>
@@ -219,15 +218,18 @@
 
         function toggleInfo(infoId) {
             const info = document.getElementById(infoId);
+            const allInfoSections = document.querySelectorAll('.info');
+
+            // Close all sections first
+            allInfoSections.forEach(element => {
+                if (element !== info) {
+                    element.classList.remove('active');
+                    document.getElementById(element.id.replace('-info', '')).checked = false;
+                }
+            });
+
+            // Toggle the selected section
             info.classList.toggle('active');
-            if (info.classList.contains('active')) {
-                const others = document.querySelectorAll('.info');
-                others.forEach(element => {
-                    if (element.id !== infoId) {
-                        element.classList.remove('active');
-                    }
-                });
-            }
         }
     </script>
 </body>
