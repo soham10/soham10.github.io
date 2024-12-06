@@ -23,21 +23,64 @@
             height: 32px;
         }
         .hobby-container {
+            display: flex;
+            align-items: center;
             margin-bottom: 15px;
+        }
+        .hobby-container label {
+            margin-left: 10px;
+        }
+        .toggle-switch {
+            display: inline-block;
+            position: relative;
+            width: 50px;
+            height: 24px;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            border-radius: 24px;
+            transition: background-color 0.3s;
+        }
+        .toggle-slider::before {
+            position: absolute;
+            content: '';
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background-color: white;
+            transition: transform 0.3s;
+            top: 4px;
+            left: 4px;
+        }
+        input:checked + .toggle-slider {
+            background-color: #4CAF50;
+        }
+        input:checked + .toggle-slider::before {
+            transform: translateX(26px);
         }
         .info {
             display: none;
-            margin-top: 5px;
-            padding: 5px;
+            margin-top: 20px;
+            padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
             background-color: #f9f9f9;
+            overflow-y: auto;
+            max-height: 400px;
         }
         .info.active {
             display: block;
-        }
-        input[type="checkbox"] {
-            margin-right: 10px;
         }
     </style>
 </head>
@@ -63,7 +106,7 @@
             <p>Hey there! I'm Soham, a so-called nerd (or whatever they say in Gen Z lingo), juggling my love for physics, math, rockets, machine learning, cars, cricket, and you. Whether it's solving puzzles, speed-cubing with my Rubik’s cube, or diving into cool projects that turn nerdy ideas into real-world magic, I’m always up for a challenge. I thrive on trying new things, geeking out over the latest tech, and sparking conversations with awesome people.</p>
             <br>
             <p>I'm a sophomore student at IIT Bombay, currently pursuing B.Tech in Engineering Physics with honours in Physics and a minor in Mathematics. Apart from that, I am a Volunteer at the Maths N Physics Club at IITB and a Junior Design Engineer at the IITB Rocket Team.</p>
-            <p>Link to my CV: <a href="CV.pdf" target="_blank">Download my CV</a></p>
+            <p>Link to my CV: <a href="CV.pdf" target="_blank">Soham's CV</a></p>
         </section>
 
         <section id="life" class="tab-content">
@@ -84,48 +127,66 @@
         <section id="hobbies" class="tab-content">
             <h2>Hobbies</h2>
             <div class="hobby-container">
-                <input type="checkbox" id="fiction-books" onclick="toggleInfo('fiction-info')">
                 <label for="fiction-books">Fiction Books</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="fiction-books" onchange="toggleInfo('fiction-info')">
+                    <span class="toggle-slider"></span>
+                </label>
             </div>
             <div id="fiction-info" class="info">
                 I enjoy exploring different worlds and perspectives through captivating stories in fiction.
             </div>
 
             <div class="hobby-container">
-                <input type="checkbox" id="sports" onclick="toggleInfo('sports-info')">
                 <label for="sports">Sports</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="sports" onchange="toggleInfo('sports-info')">
+                    <span class="toggle-slider"></span>
+                </label>
             </div>
             <div id="sports-info" class="info">
                 I'm a fan of playing and watching sports, especially cricket and football.
             </div>
 
             <div class="hobby-container">
-                <input type="checkbox" id="movies" onclick="toggleInfo('movies-info')">
                 <label for="movies">Movies</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="movies" onchange="toggleInfo('movies-info')">
+                    <span class="toggle-slider"></span>
+                </label>
             </div>
             <div id="movies-info" class="info">
                 I love watching movies, from thrilling blockbusters to indie gems.
             </div>
 
             <div class="hobby-container">
-                <input type="checkbox" id="gaming" onclick="toggleInfo('gaming-info')">
                 <label for="gaming">Gaming</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="gaming" onchange="toggleInfo('gaming-info')">
+                    <span class="toggle-slider"></span>
+                </label>
             </div>
             <div id="gaming-info" class="info">
                 Gaming is my way to relax and enjoy interactive storytelling and challenges.
             </div>
 
             <div class="hobby-container">
-                <input type="checkbox" id="indian-history" onclick="toggleInfo('history-info')">
                 <label for="indian-history">Indian History</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="indian-history" onchange="toggleInfo('history-info')">
+                    <span class="toggle-slider"></span>
+                </label>
             </div>
             <div id="history-info" class="info">
                 Exploring India's rich and diverse history is a passion of mine.
             </div>
 
             <div class="hobby-container">
-                <input type="checkbox" id="travelling" onclick="toggleInfo('travelling-info')">
                 <label for="travelling">Travelling</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="travelling" onchange="toggleInfo('travelling-info')">
+                    <span class="toggle-slider"></span>
+                </label>
             </div>
             <div id="travelling-info" class="info">
                 I love discovering new places, cultures, and experiences through travel.
@@ -135,55 +196,38 @@
         <section id="projects" class="tab-content">
             <h2>Projects</h2>
             <ul>
-                <li><strong>IPL Match Predictor:</strong> A machine learning model predicting outcomes and scores for IPL matches using LSTM and regression models.</li>
-                <li><strong>Summer of Science:</strong> A project focusing on applying machine learning techniques for data analysis and predictions.</li>
-                <li><strong>Krittika Summer Project:</strong> Involved designing and implementing solutions using machine learning algorithms and data analysis.</li>
+                <li><strong>IPL Match Predictor:</strong> A machine learning project that predicts IPL match outcomes, team scores, and individual player performances using Keras. Currently enhancing it with LSTM models for better trend analysis.</li>
+                <li><strong>Physics Simulation:</strong> Developing a fluid dynamics simulation using 1D Navier-Stokes equations and Lattice-Boltzmann methods.</li>
             </ul>
         </section>
 
         <section id="quizzing" class="tab-content">
             <h2>Quizzing</h2>
-            <p>I have participated in various science and technology quizzes at national and international levels, winning multiple awards.</p>
+            <p>I have a passion for quizzing and have participated in various quiz competitions, honing my knowledge across different domains such as science, sports, and general knowledge.</p>
         </section>
-    </div>
 
-    <footer>
-        <p>&copy; 2024 Soham Sahasrabuddhe. All Rights Reserved.</p>
-        <div class="social-links">
-            <a href="https://www.linkedin.com/in/soham-sahasrabuddhe-118901284" target="_blank">
-                <img src="Images/linkedin.png" alt="LinkedIn">
-            </a>
-            <a href="https://www.instagram.com/ssoham_10/" target="_blank">
-                <img src="Images/instagram.png" alt="Instagram">
-            </a>
-            <a href="https://github.com/soham10" target="_blank">
-                <img src="Images/github.png" alt="GitHub">
-            </a>
-            <a href="https://x.com/Asteroidnix89" target="_blank">
-                <img src="Images/X.png" alt="Twitter">
-            </a>
-        </div>
-    </footer>
+    </div>
 
     <script>
         function showTab(event, tabId) {
-            event.preventDefault();
             const tabs = document.querySelectorAll('.tab-content');
-            tabs.forEach(tab => tab.classList.remove('active'));
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
             document.getElementById(tabId).classList.add('active');
         }
 
         function toggleInfo(infoId) {
             const info = document.getElementById(infoId);
             info.classList.toggle('active');
-            
-            // Close other sections when opening a new one
-            const others = document.querySelectorAll('.info');
-            others.forEach(element => {
-                if (element.id !== infoId) {
-                    element.classList.remove('active');
-                }
-            });
+            if (info.classList.contains('active')) {
+                const others = document.querySelectorAll('.info');
+                others.forEach(element => {
+                    if (element.id !== infoId) {
+                        element.classList.remove('active');
+                    }
+                });
+            }
         }
     </script>
 </body>
