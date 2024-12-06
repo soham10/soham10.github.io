@@ -6,7 +6,6 @@
     <title>Soham Sahasrabuddhe</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* Quick inline style for hiding sections */
         .tab-content {
             display: none;
         }
@@ -33,6 +32,9 @@
             border: 1px solid #ddd;
             border-radius: 5px;
             background-color: #f9f9f9;
+        }
+        .info.active {
+            display: block;
         }
         input[type="checkbox"] {
             margin-right: 10px;
@@ -82,51 +84,51 @@
         <section id="hobbies" class="tab-content">
             <h2>Hobbies</h2>
             <div class="hobby-container">
-                <input type="checkbox" id="fiction-books" onchange="toggleInfo('fiction-info')">
+                <input type="checkbox" id="fiction-books" onclick="toggleInfo('fiction-info')">
                 <label for="fiction-books">Fiction Books</label>
-                <div id="fiction-info" class="info">
-                    I enjoy exploring different worlds and perspectives through captivating stories in fiction.
-                </div>
+            </div>
+            <div id="fiction-info" class="info">
+                I enjoy exploring different worlds and perspectives through captivating stories in fiction.
             </div>
 
             <div class="hobby-container">
-                <input type="checkbox" id="sports" onchange="toggleInfo('sports-info')">
+                <input type="checkbox" id="sports" onclick="toggleInfo('sports-info')">
                 <label for="sports">Sports</label>
-                <div id="sports-info" class="info">
-                    I'm a fan of playing and watching sports, especially cricket and football.
-                </div>
+            </div>
+            <div id="sports-info" class="info">
+                I'm a fan of playing and watching sports, especially cricket and football.
             </div>
 
             <div class="hobby-container">
-                <input type="checkbox" id="movies" onchange="toggleInfo('movies-info')">
+                <input type="checkbox" id="movies" onclick="toggleInfo('movies-info')">
                 <label for="movies">Movies</label>
-                <div id="movies-info" class="info">
-                    I love watching movies, from thrilling blockbusters to indie gems.
-                </div>
+            </div>
+            <div id="movies-info" class="info">
+                I love watching movies, from thrilling blockbusters to indie gems.
             </div>
 
             <div class="hobby-container">
-                <input type="checkbox" id="gaming" onchange="toggleInfo('gaming-info')">
+                <input type="checkbox" id="gaming" onclick="toggleInfo('gaming-info')">
                 <label for="gaming">Gaming</label>
-                <div id="gaming-info" class="info">
-                    Gaming is my way to relax and enjoy interactive storytelling and challenges.
-                </div>
+            </div>
+            <div id="gaming-info" class="info">
+                Gaming is my way to relax and enjoy interactive storytelling and challenges.
             </div>
 
             <div class="hobby-container">
-                <input type="checkbox" id="indian-history" onchange="toggleInfo('history-info')">
+                <input type="checkbox" id="indian-history" onclick="toggleInfo('history-info')">
                 <label for="indian-history">Indian History</label>
-                <div id="history-info" class="info">
-                    Exploring India's rich and diverse history is a passion of mine.
-                </div>
+            </div>
+            <div id="history-info" class="info">
+                Exploring India's rich and diverse history is a passion of mine.
             </div>
 
             <div class="hobby-container">
-                <input type="checkbox" id="travelling" onchange="toggleInfo('travelling-info')">
+                <input type="checkbox" id="travelling" onclick="toggleInfo('travelling-info')">
                 <label for="travelling">Travelling</label>
-                <div id="travelling-info" class="info">
-                    I love discovering new places, cultures, and experiences through travel.
-                </div>
+            </div>
+            <div id="travelling-info" class="info">
+                I love discovering new places, cultures, and experiences through travel.
             </div>
         </section>
 
@@ -172,8 +174,16 @@
         }
 
         function toggleInfo(infoId) {
-            const infoDiv = document.getElementById(infoId);
-            infoDiv.style.display = infoDiv.style.display === 'none' || infoDiv.style.display === '' ? 'block' : 'none';
+            const info = document.getElementById(infoId);
+            info.classList.toggle('active');
+            
+            // Close other sections when opening a new one
+            const others = document.querySelectorAll('.info');
+            others.forEach(element => {
+                if (element.id !== infoId) {
+                    element.classList.remove('active');
+                }
+            });
         }
     </script>
 </body>
