@@ -106,7 +106,7 @@
             <p>Hey there! I'm Soham, a so-called nerd (or whatever they say in Gen Z lingo), juggling my love for physics, math, rockets, machine learning, cars, cricket, and you. Whether it's solving puzzles, speed-cubing with my Rubik’s cube, or diving into cool projects that turn nerdy ideas into real-world magic, I’m always up for a challenge. I thrive on trying new things, geeking out over the latest tech, and sparking conversations with awesome people.</p>
             <br>
             <p>I'm a sophomore student at IIT Bombay, currently pursuing B.Tech in Engineering Physics with honours in Physics and a minor in Mathematics. Apart from that, I am a Volunteer at the Maths N Physics Club at IITB and a Junior Design Engineer at the IITB Rocket Team.</p>
-            <p>Link to my CV: <a href="CV.pdf" target="_blank">Soham's CV</a></p>
+            <p>Link to my CV: <a href="CV.pdf" target="_blank">Download my CV</a></p>
         </section>
 
         <section id="life" class="tab-content">
@@ -205,6 +205,7 @@
             <h2>Quizzing</h2>
             <p>I have a passion for quizzing and have participated in various quiz competitions, honing my knowledge across different domains such as science, sports, and general knowledge.</p>
         </section>
+
     </div>
 
     <script>
@@ -218,18 +219,15 @@
 
         function toggleInfo(infoId) {
             const info = document.getElementById(infoId);
-            const allInfoSections = document.querySelectorAll('.info');
-
-            // Close all sections first
-            allInfoSections.forEach(element => {
-                if (element !== info) {
-                    element.classList.remove('active');
-                    document.getElementById(element.id.replace('-info', '')).checked = false;
-                }
-            });
-
-            // Toggle the selected section
             info.classList.toggle('active');
+            if (info.classList.contains('active')) {
+                const others = document.querySelectorAll('.info');
+                others.forEach(element => {
+                    if (element.id !== infoId) {
+                        element.classList.remove('active');
+                    }
+                });
+            }
         }
     </script>
 </body>
