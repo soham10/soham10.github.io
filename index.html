@@ -344,18 +344,15 @@
     const info = document.getElementById(infoId);
     const others = document.querySelectorAll('.info');
 
-    // Check if the clicked element is already active
-    const isAlreadyActive = info.classList.contains('active');
-
-    // Remove 'active' class from all elements
+    // Iterate over all elements to remove 'active' class
     others.forEach(element => {
-        element.classList.remove('active');
+        if (element !== info) {
+            element.classList.remove('active');
+        }
     });
 
-    // Toggle 'active' class only if it was not already active
-    if (!isAlreadyActive) {
-        info.classList.add('active');
-    }
+    // Add 'active' class to the clicked element
+    info.classList.add('active');
 }
     </script>
 </body>
