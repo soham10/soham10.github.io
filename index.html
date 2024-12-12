@@ -213,14 +213,16 @@
         <section id="hobbies" class="tab-content">
             <h2>Hobbies</h2>
             <div class="hobby-container">
-                <label for="fiction-books">Fiction Books</label>
+                <label for="books">Books</label>
                 <label class="toggle-switch">
-                    <input type="checkbox" id="fiction-books" onchange="toggleInfo('fiction-info')">
+                    <input type="checkbox" id="books" onchange="toggleInfo('books-info')">
                     <span class="toggle-slider"></span>
                 </label>
             </div>
-            <div id="fiction-info" class="info">
-                I enjoy exploring different worlds and perspectives through captivating stories in fiction.
+            <div id="books-info" class="info">
+                I’m an avid reader with a deep love for fiction, history, and travel books. As a proud Potterhead, I’ve read the Harry Potter series at least three times, finding new layers of magic with each revisit. My fascination with science and science fiction leads me to the works of Stephen Hawking, 
+                whose insights into the cosmos are endlessly inspiring, and Isaac Asimov, whose visionary storytelling blends imagination with profound scientific ideas. Bill Bryson’s books captivate me with their unique blend of humor, curiosity, and informative takes on both science and travel. I also enjoy immersing 
+                myself in the world of Percy Jackson, appreciating its fresh take on mythology through thrilling adventures. My love for history, especially Indian history, fuels my passion for exploring stories of the past and their relevance in shaping today’s world.
             </div>
 
             <div class="hobby-container">
@@ -339,17 +341,18 @@
         }
 
         function toggleInfo(infoId) {
-            const info = document.getElementById(infoId);
-            info.classList.toggle('active');
-            if (info.classList.contains('active')) {
-                const others = document.querySelectorAll('.info');
-                others.forEach(element => {
-                    if (element.id !== infoId) {
-                        element.classList.remove('active');
-                    }
-                });
-            }
-        }
+    const info = document.getElementById(infoId);
+    const others = document.querySelectorAll('.info');
+
+    // Remove 'active' class from all elements
+    others.forEach(element => {
+        element.classList.remove('active');
+    });
+
+    if (!info.classList.contains('active')) {
+        info.classList.add('active');
+    }
+}
     </script>
 </body>
 </html>
