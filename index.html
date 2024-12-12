@@ -332,26 +332,19 @@
     </footer>
 
     <script>
-        function showTab(event, tabId) {
-            const tabs = document.querySelectorAll('.tab-content');
-            tabs.forEach(tab => {
-                tab.classList.remove('active');
-            });
-            document.getElementById(tabId).classList.add('active');
-        }
-
         function toggleInfo(infoId) {
     const info = document.getElementById(infoId);
     const others = document.querySelectorAll('.info');
 
     // Remove 'active' class from all elements
     others.forEach(element => {
-        element.classList.remove('active');
+        if (element !== info) {
+            element.classList.remove('active');
+        }
     });
 
-    if (!info.classList.contains('active')) {
-        info.classList.add('active');
-    }
+    // Toggle the 'active' class for the clicked element
+    info.classList.toggle('active');
 }
     </script>
 </body>
