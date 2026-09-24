@@ -1,0 +1,37 @@
+---
+import Logo from './Logo.astro';
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+
+const links = [
+	{ href: '/research', label: 'Research' },
+	{ href: '/writing', label: 'Writing' },
+	{ href: '/beyond', label: 'Beyond' },
+];
+
+const isCurrent = (href: string) => path === href || path.startsWith(href + '/');
+---
+
+<nav class="nav">
+	<div class="nav-in">
+		<a class="brand" href="/">
+			<Logo size={20} />
+			<span>Soham Sahasrabuddhe</span>
+		</a>
+		<div class="nav-links">
+			{links.map((l) => (
+				<a href={l.href} aria-current={isCurrent(l.href) ? 'page' : undefined}>{l.label}</a>
+			))}
+			<a href="/Docs/Soham_cv.pdf" target="_blank" rel="noopener">CV ↗</a>
+		</div>
+		<div class="nav-tools">
+			<button class="icon-btn" id="theme-btn" type="button" aria-label="Toggle colour theme">
+				<svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+				<svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"></path></svg>
+			</button>
+			<button class="icon-btn" id="term-btn" type="button" aria-label="Open terminal" title="Open terminal (~)">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8l4 4-4 4M12.5 16H19"></path></svg>
+			</button>
+		</div>
+	</div>
+</nav>

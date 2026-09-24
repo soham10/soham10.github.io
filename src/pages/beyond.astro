@@ -1,0 +1,146 @@
+---
+import Base from '../layouts/Base.astro';
+
+/**
+ * Handles are rendered as small middot-separated links (.chips), because a
+ * run of twenty accounts reads as a list and not as twenty sentences.
+ */
+const instagram = [
+	'technologyreview',
+	'symmetry_magazine',
+	'quantamag',
+	'unseenmp',
+	'gowithsameer',
+	'indiahiddengems',
+	'historycoolkids',
+	'history.asitis',
+	'indialostandfound',
+	'brownhistory',
+	'betweenthelines20',
+	'warmup',
+	'areypatahai',
+	'greatindianhustlers',
+];
+
+const reddit = [
+	'todayilearned',
+	'triviaoftheday',
+	'Quizbowl',
+	'history',
+	'HistoryMemes',
+	'HistoryPorn',
+	'AajMaineJana',
+	'MapPorn',
+	'IndiaCricket',
+	'neutrinos',
+	'Damnthatsinteresting',
+	'interestingasfuck',
+	'helm',
+];
+
+const films = [
+	'The Dark Knight',
+	'Inception',
+	'Interstellar',
+	'The Martian',
+	'Oppenheimer',
+	'The Theory of Everything',
+	'The Social Network',
+	'The Wolf of Wall Street',
+	'Iron Man',
+	'Spider-Man 2',
+	'Spider-Man: Brand New Day',
+	'Across the Spider-Verse',
+	'Star Wars V',
+	'Back to the Future',
+	'The Matrix',
+	'Dune',
+	'Cars 2',
+	'Toy Story 3',
+];
+---
+
+<Base
+	title="Beyond"
+	description="Quizzing, films, travel and food — the other half, and the resources behind a decade of quizzing."
+>
+
+	<header class="wrap page-head">
+		<h1>Things I do to keep my creativity fresh</h1>
+		<p class="lede">Most of it comes back to the same thing: I like knowing where things come from. That is what quizzing rewards, it is most of why I read history, and it is not far off what makes a physics problem fun (I think!)</p>
+	</header>
+
+	<section class="wrap block prose" id="quizzing">
+		<h2>Quizzing</h2>
+
+		<p>I have been at this since class six. If you have never done it: a quiz question is a set of hints that only resolve if you connect them, and the pleasure is almost entirely in the moment they click. Getting there needs a wide and fairly undisciplined reading habit, history, geography, science, sport, film, music, whatever is in front of me, which is a hobby I would have anyway lol</p>
+		<p>I have quizzed at school, college and national level, and currently part of IITB Quizzing Team. My genres are India, history and mythology, sci-tech, and sport!</p>
+
+		<h3>Some good stuff</h3>
+
+		<ul class="kit">
+			<li>
+				<span class="k">Wikipedia</span>
+				<span>Still the best thing on the internet. The rabbit holes are not a distraction from the reading; they <em>are</em> the reading</span>
+			</li>
+			<li>
+				<span class="k">Newspapers</span>
+				<span>Used to do this in school but lost touch in undergrad</span>
+			</li>
+			<li>
+				<span class="k">Sport</span>
+				<span><a href="https://www.nytimes.com/athletic/tag/the-pulse/" target="_blank" rel="noopener">The Pulse</a> at The Athletic is the single best sports read going</span>
+			</li>
+			<li>
+				<span class="k">Drilling</span>
+				<span><a href="https://www.sporcle.com" target="_blank" rel="noopener">Sporcle</a>, a fun way to test knowledge</span>
+			</li>
+			<li>
+				<span class="k">Instagram</span>
+				<span>
+					Accounts that are worth the algorithm:
+					<span class="chips kit-chips">
+						{instagram.map((h) => (
+							<a class="chip" href={`https://www.instagram.com/${h}/`} target="_blank" rel="noopener">@{h}</a>
+						))}
+					</span>
+				</span>
+			</li>
+			<li>
+				<span class="k">Reddit</span>
+				<span>
+					And on the other tab:
+					<span class="chips kit-chips">
+						{reddit.map((r) => (
+							<a class="chip" href={`https://www.reddit.com/r/${r}/`} target="_blank" rel="noopener">r/{r}</a>
+						))}
+					</span>
+				</span>
+			</li>
+			<li>
+				<span class="k">Long reads</span>
+				<span>The <a href="https://iicdelhi.in/publications" target="_blank" rel="noopener">India International Centre</a> occasional publications are underrated. My picks: <span class="nums">OP 12, OP 13, OP 28, OP 32-33, OP 48</span></span>
+			</li>
+			<li>
+				<span class="k">Odd corners</span>
+				<span><a href="https://amul.com/topicals" target="_blank" rel="noopener">Amul topicals</a> are an accidental archive of Indian current affairs, and the <a href="https://whc.unesco.org/en/list/" target="_blank" rel="noopener">UNESCO World Heritage list</a> is worth knowing cold</span>
+			</li>
+		</ul>
+	</section>
+
+	<section class="wrap block prose" id="films">
+		<h2>Films</h2>
+
+		<p>I watch across genres, but what decides it for me is plot and cinematography, I want a film that makes me think and makes me feel, and I will forgive a lot if it does. That said, I am not going to pretend I do not love a good action film xD</p>
+
+		<p class="muted list-intro">A shortlist, and it was hard to keep it this short :')</p>
+		<p class="picks">{films.map((f, i) => (<><cite>{f}</cite>{i < films.length - 1 && <span class="sep"> · </span>}</>))}</p>
+	</section>
+
+	<section class="wrap block prose" id="travel">
+		<h2>Travel and food</h2>
+
+		<p>I travel whenever there is a gap in the calendar, and I have now covered most corners of India, the North-East is the conspicuous gap and has been at the top of the list for a while. The point is rarely the sight itself: it is meeting people, and eating their food, and working out why a place is the way it is. I am a foodie and a vegetarian, which sounds like a contradiction in this country until you have actually eaten here lmao. Will upload pictues from trips soon!</p>
+	</section>
+
+</Base>

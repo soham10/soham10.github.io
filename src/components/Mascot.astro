@@ -1,0 +1,88 @@
+---
+/**
+ * Soham, drawn from the reference photo: piled curls tapering at the temples,
+ * heavy brows, rectangular tinted shades, stubble, a wide smile.
+ *
+ * The medallion is always warm cream so the illustration reads on both the
+ * paper and the night background — near-black hair on a dark page would
+ * vanish. The rim uses currentColor, so the frame still takes the theme.
+ */
+interface Props {
+	size?: number;
+	class?: string;
+	title?: string;
+}
+const { size = 88, class: cls = '', title = 'Illustration of Soham' } = Astro.props;
+---
+
+<svg
+	class={`mascot ${cls}`}
+	width={size}
+	height={size}
+	viewBox="0 0 100 100"
+	role="img"
+	aria-label={title}
+	xmlns="http://www.w3.org/2000/svg"
+>
+	<defs>
+		<clipPath id="mascot-clip">
+			<circle cx="50" cy="50" r="47" />
+		</clipPath>
+	</defs>
+
+	<circle cx="50" cy="50" r="47" fill="#f6efe2" />
+
+	<g clip-path="url(#mascot-clip)">
+		<!-- shirt -->
+		<path d="M11 100 C13 84 29 77 50 77 C71 77 87 84 89 100 Z" fill="#1c82bd" />
+		<path d="M41 78 L50 87 L59 78" fill="none" stroke="#11618f" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+		<text x="70" y="96" font-family="Georgia, serif" font-style="italic" font-size="12" fill="#bfe4f7">ν</text>
+
+		<!-- neck -->
+		<path d="M43 60 H57 V78 C57 81 43 81 43 78 Z" fill="#a4652c" />
+
+		<!-- face -->
+		<ellipse cx="50" cy="50" rx="19.5" ry="21.5" fill="#c07f3e" />
+		<circle cx="30" cy="53" r="4" fill="#a4652c" />
+		<circle cx="70" cy="53" r="4" fill="#a4652c" />
+
+		<!-- stubble -->
+		<path d="M35 59 Q37 70 50 71.3 Q63 70 65 59 Q62 68.4 50 69 Q38 68.4 35 59" fill="#6f4118" opacity="0.32" />
+		<ellipse cx="50" cy="63.4" rx="7" ry="2.1" fill="#6f4118" opacity="0.3" />
+
+		<!-- smile -->
+		<path d="M41 64.8 Q50 71.6 59 64.8 Z" fill="#6d2b24" />
+		<path d="M42.2 65.2 Q50 69.2 57.8 65.2 Z" fill="#f7f1e8" />
+		<path d="M47.8 60.4 Q50 62.6 52.2 60.4" fill="none" stroke="#8a5426" stroke-width="2" stroke-linecap="round" />
+
+		<!-- curls: piled on top, tapering at the temples. one fill, no internal strokes -->
+		<g fill="#241a12">
+			<circle cx="50" cy="23" r="15" />
+			<circle cx="36" cy="27" r="12" />
+			<circle cx="64" cy="27" r="12" />
+			<circle cx="43" cy="14" r="10" />
+			<circle cx="58" cy="14" r="10" />
+			<circle cx="27" cy="34" r="8.5" />
+			<circle cx="73" cy="34" r="8.5" />
+			<circle cx="31" cy="45" r="4.6" />
+			<circle cx="69" cy="45" r="4.6" />
+		</g>
+
+		<!-- brows -->
+		<path d="M35 45.6 Q41 41.4 47 44.8" fill="none" stroke="#241a12" stroke-width="3" stroke-linecap="round" />
+		<path d="M53 44.8 Q59 41.4 65 45.6" fill="none" stroke="#241a12" stroke-width="3" stroke-linecap="round" />
+
+		<!-- shades -->
+		<g>
+			<rect x="30.5" y="47" width="17.5" height="12" rx="3.5" fill="#39434d" stroke="#2a333c" stroke-width="1.6" />
+			<rect x="52" y="47" width="17.5" height="12" rx="3.5" fill="#39434d" stroke="#2a333c" stroke-width="1.6" />
+			<path d="M48 50.6 H52" fill="none" stroke="#2a333c" stroke-width="1.8" stroke-linecap="round" />
+			<path d="M30.5 49.4 L26 51" fill="none" stroke="#2a333c" stroke-width="1.8" stroke-linecap="round" />
+			<path d="M69.5 49.4 L74 51" fill="none" stroke="#2a333c" stroke-width="1.8" stroke-linecap="round" />
+			<path d="M34 57.4 L40.5 48.6" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" opacity="0.2" />
+			<path d="M55.5 57.4 L62 48.6" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" opacity="0.2" />
+		</g>
+	</g>
+
+	<circle cx="50" cy="50" r="47" fill="none" stroke="currentColor" stroke-width="2" opacity="0.22" />
+</svg>

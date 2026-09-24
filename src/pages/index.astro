@@ -1,0 +1,138 @@
+---
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import Gallery from '../components/Gallery.astro';
+
+const posts = (await getCollection('writing', ({ data }) => !data.draft)).sort(
+	(a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+const latest = posts.slice(0, 3);
+
+const explore = [
+	{ k: '01', href: '/research', name: 'research/', desc: 'Astroparticle Physics and High Energy Phenomenology' },
+	{ k: '02', href: '/writing', name: 'writing/', desc: 'Blog, course notes and public code' },
+	{ k: '03', href: '/beyond', name: 'beyond/', desc: 'All about fun stuff, hot stuff, cold stuff and nerdy stuff' },
+	{ k: '04', href: '/Docs/Soham_cv.pdf', name: 'CV', desc: 'Meh, life in three pages:)', external: true },
+];
+---
+
+<Base
+	title="Call Me Soham"
+	description="My name is Soham Sahasrabuddhe, and I am currently an undergraduate at the Indian Institute of Technology Bombay, interested in neutrino physics, dark matter and cosmology. Welcome to my personal page, where I write about my research, my interests, and my life."
+>
+
+	<div class="wrap hero">
+		<h1 class="sr-only">Soham Sahasrabuddhe, EP undergrad at IITB </h1>
+		<div class="tw" id="hero-term">
+			<div class="tw-bar">
+				<span class="tw-dots"><span class="tw-dot r"></span><span class="tw-dot y"></span><span class="tw-dot g"></span></span>
+				<span>visitor@soham — bash</span>
+			</div>
+			<div class="tw-body">
+				<div class="hero-line"><span class="ps1">visitor@soham<span class="path">:~$</span></span> <span data-type data-cmd>aboutme</span></div>
+				<div class="hero-line hero-out"><span data-type>I am Soham, a multipotentialite, since I believe in the quote - "Jack of all trades, master of none, still better than master on one" :))</span></div>
+				<div class="hero-line hero-out"><span data-type>Currently I want to pursue research in Physics, work on neutrinos, supernovas, dark matter (if it exists tsk tsk) and what made who we are xD</span></div>
+				<div class="hero-line hero-out"><span data-type>Away from the hustle, I like quizzing, explore new places, sports, movies and games, can email me if you wanna chat!</span></div>
+				<div class="hero-gap"></div>
+				<div class="hero-line"><span class="ps1">visitor@soham<span class="path">:~$</span></span> <span data-type data-cmd>ls ~/explore</span></div>
+
+				<div class="explore" id="explore">
+					{explore.map((e) => (
+						<a
+							class="ecard"
+							href={e.href}
+							target={e.external ? '_blank' : undefined}
+							rel={e.external ? 'noopener' : undefined}
+						>
+							<span class="k">{e.k}</span>
+							<span class="t">{e.name}</span>
+							<span class="d">{e.desc}</span>
+						</a>
+					))}
+				</div>
+			</div>
+		</div>
+
+		<div class="hero-skip" id="hero-skip">
+			<span>press <kbd>~</kbd> anywhere for the terminal, for commands type <strong>help</strong></span>
+		</div>
+	</div>
+
+	<section class="wrap block prose" id="about">
+		<h2>About</h2>
+
+		<div class="portrait"><img src="/images/pic01.jpg" alt="Soham Sahasrabuddhe" width="849" height="1600" /></div>
+
+		<p>Hello mate, Soham here! I'm an undergraduate at IITB, pursuing Engineering Physics with honours and a minor in mathematics. My work sits in <strong>theoretical and computational astroparticle physics</strong> which includes neutrino physics, with dark matter and cosmology, with little detours into nuclear and particle theory.</p>
+		<p>Most of my time is spent in learning new things, reading books and papers, trying to understand them and sometimes, trying to implent simulation ones.</p>
+		<p>Rest of my time, I spent with friends, or watch sports - special mention to cricket, football (Visca Barca 💙❤️), and racing! Apart from that, I also serve as a TA for Advanced Quantum Mechanics, and a mentor to sophomores and freshmen. Before that, for my interest in rocketery, I spent a year designing solid rocket motors, in propulsion subsystems, researching on different mechanisms which can be adopted in given logistic constraints.</p>
+
+		<div class="callout">
+			<div class="callout-title">Currently</div>
+			<ul>
+				<li>Researching on ultralight dark matter and dark matter phenomenology with Prof. Manibrata Sen, having worked previously on <a href="/research">neutrino flavour evolution</a> in solar and supernova environments</li>
+				<li>Researching on Kaon Condensation and Effective Field Theory for QCD in dense environments with Prof. Rishi Sharma</li>
+				<li>Teaching Assistant for Quantum Mechanics II, Department of Physics, IIT Bombay</li>
+				<li>Institute Student Mentor for twelve freshmen</li>
+				<li>Web Team Lead for DAMP & Department Academic Mentor for eight sophomores in Engineering Physics</li>
+			</ul>
+		</div>
+	</section>
+
+	{latest.length > 0 && (
+		<section class="wrap block" id="latest-writing">
+			<h2>Recent writing</h2>
+			<ul class="post-list">
+				{latest.map((p) => (
+					<li>
+						{p.data.url
+							? <a href={p.data.url} target="_blank" rel="noopener">{p.data.title} ↗</a>
+							: <a href={`/writing/${p.id}`}>{p.data.title}</a>}
+						<time datetime={p.data.date.toISOString()}>
+							{p.data.date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+						</time>
+					</li>
+				))}
+			</ul>
+			<p class="note" style="margin-top:1rem"><a href="/writing">All writing →</a></p>
+		</section>
+	)}
+
+	<section class="wrap block" id="gallery">
+		<h2>Life here</h2>
+		<p class="muted">Zara hatke, zara bachke, ye hai Bombay meri jaan!</p>
+		<Gallery />
+	</section>
+
+	<section class="wrap block" id="contact">
+		<h2>Get in touch</h2>
+		<p class="muted">Happy to talk about sports, history, science and anything interesting. Email is the fastest route, though I am active on Instagram!</p>
+
+		<ul class="contact-list" style="margin-top:1.2rem">
+			<li><span class="k">email</span><span><a href="mailto:sahasrabuddhesoham2005@gmail.com">sahasrabuddhesoham2005@gmail.com</a></span></li>
+			<li><span class="k">academic</span><span><a href="mailto:sohams@iitb.ac.in">sohams@iitb.ac.in</a> <span class="muted small">— until I graduate</span></span></li>
+			<li><span class="k">github</span><span><a href="https://github.com/soham10" target="_blank" rel="noopener">soham10</a></span></li>
+			<li><span class="k">linkedin</span><span><a href="https://www.linkedin.com/in/soham-sahasrabuddhe-118901284" target="_blank" rel="noopener">soham-sahasrabuddhe</a></span></li>
+			<li><span class="k">twitter</span><span><a href="https://x.com/Asteroidnix89" target="_blank" rel="noopener">@Asteroidnix89</a></span></li>
+			<li><span class="k">instagram</span><span><a href="https://www.instagram.com/ssoham_10/" target="_blank" rel="noopener">@ssoham_10</a></span></li>
+			<li><span class="k">where</span><span>IIT Bombay, Powai, Mumbai 400076</span></li>
+		</ul>
+
+		<form class="contact" method="POST" action="https://formspree.io/f/mdkazeob">
+			<div>
+				<label for="name">Name</label>
+				<input type="text" name="name" id="name" required />
+			</div>
+			<div>
+				<label for="email">Email</label>
+				<input type="email" name="email" id="email" required />
+			</div>
+			<div class="full">
+				<label for="message">Message</label>
+				<textarea name="message" id="message" rows="4" required></textarea>
+			</div>
+			<button class="btn" type="submit">Send</button>
+		</form>
+	</section>
+
+</Base>

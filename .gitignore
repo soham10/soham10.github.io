@@ -1,0 +1,18 @@
+# build output
+dist/
+.astro/
+.claude/
+.impeccable/
+
+# dependencies
+node_modules/
+
+# environment
+.env
+.env.production
+
+# os / editor
+.DS_Store
+*.log
+DESIGN.md
+PRODUCT.md

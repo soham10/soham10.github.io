@@ -1,0 +1,210 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import Mascot from '../../components/Mascot.astro';
+import { repos } from '../../data/repos';
+import { courses, notes as noteMeta, type NoteMeta } from '../../data/notes';
+
+/* ---------- posts: Markdown in src/content/writing/ ---------------------- */
+
+const posts = (await getCollection('writing', ({ data }) => !data.draft)).sort(
+	(a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+
+const fmt = (d: Date) =>
+	d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+const NOTES_ROOT = path.join(process.cwd(), 'public', 'notes');
+const ALLOWED = new Set(['.pdf', '.pptx', '.ppt']);
+
+interface Doc {
+	href: string;
+	title: string;
+	description?: string;
+	when: string;
+}
+
+interface Group {
+	title: string;
+	blurb?: string;
+	order: number;
+	docs: Doc[];
+}
+
+const ROMAN = /^(?:i{1,3}|iv|vi{0,3}|ix|xi{0,2})$/;
+const COURSE_CODE = /^[a-z]{2,3}\s?\d{3}$/;
+
+function prettify(name: string): string {
+	const words = name
+		.replace(/[-_]+/g, ' ')
+		.replace(/\s+/g, ' ')
+		.trim()
+		.split(' ')
+		.map((w) => (ROMAN.test(w) || COURSE_CODE.test(w) ? w.toUpperCase() : w));
+	const first = words[0] ?? '';
+	words[0] = first.charAt(0).toUpperCase() + first.slice(1);
+	return words.join(' ');
+}
+
+function walk(dir: string, prefix = ''): string[] {
+	let out: string[] = [];
+	let entries: fs.Dirent[];
+	try {
+		entries = fs.readdirSync(dir, { withFileTypes: true });
+	} catch {
+		return out; // public/notes/ does not exist yet — render the empty state
+	}
+	for (const e of entries) {
+		if (e.name.startsWith('.')) continue;
+		const rel = prefix ? `${prefix}/${e.name}` : e.name;
+		if (e.isDirectory()) out = out.concat(walk(path.join(dir, e.name), rel));
+		else if (ALLOWED.has(path.extname(e.name).toLowerCase())) out.push(rel);
+	}
+	return out;
+}
+
+const groups = new Map<string, Group>();
+
+for (const rel of walk(NOTES_ROOT)) {
+	const info: NoteMeta = noteMeta[rel] ?? {};
+	if (info.hide) continue;
+
+	const segments = rel.split('/');
+	const file = segments.pop()!;
+	// Files sitting loose at the top level get their own group at the end.
+	const slug = segments[0] ?? '';
+	const course = courses[slug] ?? {};
+	const stat = fs.statSync(path.join(NOTES_ROOT, rel));
+	const ext = path.extname(file).toLowerCase();
+
+	if (!groups.has(slug)) {
+		groups.set(slug, {
+			title: course.title ?? (slug ? prettify(slug) : 'Other'),
+			blurb: course.blurb,
+			order: course.order ?? (slug ? 50 : 99),
+			docs: [],
+		});
+	}
+
+	groups.get(slug)!.docs.push({
+		href: `/notes/${rel.split('/').map(encodeURIComponent).join('/')}`,
+		title: info.title ?? prettify(path.basename(file, ext)),
+		description: info.description,
+		when: info.term ?? String(stat.mtime.getFullYear()),
+	});
+}
+
+const noteGroups = [...groups.values()].sort(
+	(a, b) => a.order - b.order || a.title.localeCompare(b.title)
+);
+for (const g of noteGroups) g.docs.sort((a, b) => a.title.localeCompare(b.title));
+
+const noteCount = noteGroups.reduce((n, g) => n + g.docs.length, 0);
+
+/* ---------- code: public repos in src/data/repos.ts ---------------------- */
+
+const code = repos.map((r) => ({
+	...r,
+	href: `https://github.com/${r.repo}`,
+	label: r.name ?? r.repo.split('/')[1],
+}));
+---
+
+<Base
+	title="Writing"
+	description="Posts, course notes and public code "
+>
+
+	<header class="wrap page-head">
+		<h1>Writing</h1>
+		<p class="lede">Notion Pages, notes (both typed and handwritten), and public codes. Might have made some sign errors, please let me know!</p>
+		<nav class="jump" aria-label="Sections on this page">
+			<a href="#posts">Posts{posts.length > 0 && <span class="n">{posts.length}</span>}</a>
+			<a href="#notes">Notes{noteCount > 0 && <span class="n">{noteCount}</span>}</a>
+			{code.length > 0 && <a href="#code">Code<span class="n">{code.length}</span></a>}
+		</nav>
+	</header>
+
+	<section class="wrap block" id="posts">
+		<h2>Posts</h2>
+		{posts.length === 0 ? (
+			<div class="empty-row">
+				<Mascot size={64} title="Soham, yet to write anything" />
+				<p class="empty">
+					No posts yet — this is where they will land. The section is wired up and waiting:
+					a new piece is one Markdown file in <code>src/content/writing/</code>, and it appears
+					here and on the home page automatically.
+				</p>
+			</div>
+		) : (
+			<ul class="post-list post-list-full">
+				{posts.map((p) => (
+					<li>
+						<div class="post-head">
+							{p.data.url
+								? <a href={p.data.url} target="_blank" rel="noopener">{p.data.title} ↗</a>
+								: <a href={`/writing/${p.id}`}>{p.data.title}</a>}
+							<time class="when" datetime={p.data.date.toISOString()}>{fmt(p.data.date)}</time>
+						</div>
+						{p.data.description && <p class="post-desc">{p.data.description}</p>}
+						{p.data.tags.length > 0 && (
+							<div class="chips" style="margin-top:0.5rem">
+								{p.data.tags.map((t) => <span class="chip">{t}</span>)}
+							</div>
+						)}
+					</li>
+				))}
+			</ul>
+		)}
+	</section>
+
+	<section class="wrap block" id="notes">
+		<h2>Notes</h2>
+		{noteCount === 0 ? (
+			<p class="empty">
+				Nothing up yet. Notes are PDFs: drop one into
+				<code>public/notes/&lt;course&gt;/</code> and it appears here on the next build.
+			</p>
+		) : (
+			noteGroups.map((g) => (
+				<div class="note-group">
+					<h3>{g.title}</h3>
+					{g.blurb && <p class="muted note-blurb">{g.blurb}</p>}
+					<ul class="note-list">
+						{g.docs.map((d) => (
+							<li>
+								<div class="post-head">
+									<a href={d.href} target="_blank" rel="noopener">{d.title}</a>
+									<span class="when">{d.when}</span>
+								</div>
+								{d.description && <p class="post-desc">{d.description}</p>}
+							</li>
+						))}
+					</ul>
+				</div>
+			))
+		)}
+	</section>
+
+	{code.length > 0 && (
+		<section class="wrap block" id="code">
+			<h2>Code</h2>
+			<ul class="post-list post-list-full repo-list">
+				{code.map((r) => (
+					<li>
+						<div class="post-head">
+							<a href={r.href} target="_blank" rel="noopener">{r.label}</a>
+							{r.lang && <span class="when">{r.lang}</span>}
+						</div>
+						<p class="post-desc">
+							{r.desc}
+							{r.extra && <> <a class="aside-link" href={r.extra.href} target="_blank" rel="noopener">{r.extra.label} ↗</a></>}
+						</p>
+					</li>
+				))}
+			</ul>
+		</section>
+	)}
+
+</Base>

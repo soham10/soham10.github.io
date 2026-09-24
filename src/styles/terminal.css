@@ -1,0 +1,245 @@
+/* =============================================================
+   Terminal, interactive demos and easter eggs.
+   The terminal keeps a dark retro palette in both site themes —
+   a terminal is supposed to look like a terminal.
+   ============================================================= */
+
+/* ---------- shared terminal chrome ------------------------------ */
+
+.tw {
+  border-radius: 12px;
+  border: 1px solid var(--term-border);
+  background: var(--term-bg);
+  box-shadow: var(--shadow-lift);
+  overflow: hidden;
+  font-family: var(--f-term);
+}
+
+.tw-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.85rem;
+  background: var(--term-bar);
+  border-bottom: 1px solid var(--term-border);
+  font-size: 0.72rem;
+  color: var(--term-dim);
+  letter-spacing: 0.04em;
+}
+.tw-dots { display: flex; gap: 0.35rem; margin-right: 0.3rem; }
+.tw-dot { width: 10px; height: 10px; border-radius: 50%; background: #2c3a4a; }
+.tw-dot.r { background: #e06c5b; }
+.tw-dot.y { background: #d9a441; }
+.tw-dot.g { background: #4fb477; }
+.tw-bar .spacer { margin-left: auto; }
+.tw-bar button {
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  color: var(--term-dim);
+  font-family: var(--f-term);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.1rem 0.45rem;
+  cursor: pointer;
+}
+.tw-bar button:hover { color: var(--term-accent); border-color: var(--term-border); }
+.tw-bar button.on { color: var(--term-warm); border-color: rgba(255, 180, 84, 0.4); }
+
+.tw-body {
+  position: relative;
+  padding: 1.05rem 1.15rem 1.2rem;
+  font-size: 0.92rem;
+  line-height: 1.75;
+  color: var(--term-text);
+}
+/* scanlines live *inside* the terminal only */
+.tw-body::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.16) 0 1px, transparent 1px 3px);
+  opacity: 0.45;
+}
+.tw-body a { color: var(--term-accent); }
+.tw-body a:hover { color: #9ad9ff; }
+
+.ps1 { color: var(--term-green); }
+.ps1 .path { color: var(--term-accent); }
+.t-out { color: var(--term-text); }
+.t-dim { color: var(--term-dim); }
+.t-warm { color: var(--term-warm); }
+.t-green { color: var(--term-green); }
+.t-red { color: var(--term-red); }
+.t-cmd { color: var(--term-warm); }
+
+.caret {
+  display: inline-block;
+  width: 0.55em;
+  height: 1.05em;
+  background: var(--term-accent);
+  vertical-align: -0.18em;
+  margin-left: 0.12em;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .caret { animation: blink 1.05s step-end infinite; }
+}
+@keyframes blink { 0%, 55% { opacity: 1; } 56%, 100% { opacity: 0; } }
+
+/* ---------- hero terminal (landing) ------------------------------- */
+
+.hero { padding-top: 2.6rem; }
+.hero .tw { max-width: 100%; }
+.hero-line { white-space: pre-wrap; }
+.hero-out { display: block; color: var(--term-text); }
+.hero-gap { height: 0.85rem; }
+
+.hero-skip {
+  margin-top: 0.75rem;
+  font-family: var(--f-term);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.hero-skip button {
+  background: none;
+  border: none;
+  border-bottom: 1px dashed var(--border-strong);
+  color: var(--text-muted);
+  cursor: pointer;
+  font-family: var(--f-term);
+  font-size: 0.75rem;
+  padding: 0;
+}
+.hero-skip button:hover { color: var(--accent); border-color: var(--accent); }
+kbd {
+  font-family: var(--f-term);
+  font-size: 0.72rem;
+  border: 1px solid var(--border-strong);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  padding: 0.05rem 0.35rem;
+  background: var(--bg-subtle);
+  color: var(--text);
+}
+
+/* ---------- explore cards ------------------------------------------ */
+
+.explore {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 0.7rem;
+  margin-top: 0.9rem;
+}
+.ecard {
+  display: block;
+  text-align: left;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.028);
+  border: 1px solid var(--term-border);
+  border-radius: 9px;
+  padding: 0.75rem 0.9rem;
+  color: var(--term-text);
+  font-family: var(--f-term);
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.16s ease, border-color 0.16s, background 0.16s;
+}
+.ecard:hover, .ecard:focus-visible {
+  transform: translateY(-2px);
+  border-color: var(--term-accent);
+  background: rgba(92, 194, 255, 0.08);
+  color: var(--term-text);
+}
+.ecard .k { color: var(--term-accent); font-size: 0.74rem; letter-spacing: 0.1em; }
+.ecard .t { display: block; font-size: 0.95rem; color: #e6eef7; margin: 0.15rem 0 0.15rem; }
+.ecard .d { display: block; font-size: 0.76rem; color: var(--term-dim); line-height: 1.5; }
+.explore.hidden { display: none; }
+
+/* ---------- overlay terminal ----------------------------------------- */
+
+.term {
+  position: fixed;
+  left: 50%;
+  bottom: 1.1rem;
+  transform: translate(-50%, 130%);
+  width: min(46rem, 94vw);
+  z-index: 120;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.22s;
+  opacity: 0;
+  pointer-events: none;
+}
+.term.open { transform: translate(-50%, 0); opacity: 1; pointer-events: auto; }
+
+.term .tw-body { max-height: 46vh; overflow-y: auto; padding-bottom: 0.4rem; }
+.term .tw-body::-webkit-scrollbar { width: 8px; }
+.term .tw-body::-webkit-scrollbar-thumb { background: #2b3947; border-radius: 4px; }
+.term-line { white-space: pre-wrap; word-break: break-word; }
+
+.term-in {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-top: 1px solid var(--term-border);
+  background: var(--term-bg);
+  padding: 0.45rem 1.15rem 0.55rem;
+}
+.term-in input {
+  flex: 1;
+  min-width: 0;
+  background: none;
+  border: none;
+  outline: none;
+  font-family: var(--f-term);
+  font-size: 0.92rem;
+  color: var(--term-warm);
+  caret-color: var(--term-warm);
+}
+
+/* ---------- page transition (warp) -------------------------------------- */
+
+.warp { position: fixed; inset: 0; z-index: 300; pointer-events: none; }
+
+@media (prefers-reduced-motion: no-preference) {
+  body { animation: pagein 0.4s ease-out; }
+  @keyframes pagein { from { opacity: 0; transform: translateY(6px); } }
+}
+
+/* ---------- terminal minesweeper ------------------------------------------------ */
+
+.ms-grid { display: inline-block; line-height: 1.4; margin: 0.35rem 0; user-select: none; }
+.ms-cell { display: inline-block; width: 1.4em; text-align: center; cursor: pointer; color: var(--term-dim); }
+.ms-cell:hover { color: var(--term-warm); }
+
+/* ---------- 404 ------------------------------------------------------------------- */
+
+.err-head {
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+  flex-wrap: wrap;
+}
+.err-head .mascot { flex: none; color: var(--text); }
+
+.err-code {
+  font-family: var(--f-display);
+  font-weight: 600;
+  font-size: clamp(4.5rem, 20vw, 9rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--text);
+  margin-bottom: 0.6rem;
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  .caret { animation: none !important; }
+  body { animation: none; }
+}

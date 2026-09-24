@@ -1,0 +1,97 @@
+---
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+const papers = (await getCollection('publications')).sort(
+	(a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+const out = papers.filter((p) => p.data.status === 'preprint' || p.data.status === 'published');
+const soon = papers.filter((p) => p.data.status === 'in preparation' || p.data.status === 'submitted');
+---
+
+<Base
+	title="Research"
+	description="Neutrino phenomenology and astroparticle physics, previously worked on flavour evolution in the Sun and in supernovae, with interests in dark matter detection, and machine-learning inferences in physics">
+
+	<section class="wrap block prose" id="publications">
+		<h2>Papers</h2>
+		{papers.length === 0 ? (
+			<p class="empty">Nothing out yet.</p>
+		) : (
+			<>
+				{out.length > 0 && (
+					<ol class="paper-list">
+						{out.map((p) => (
+							<li>
+								<span class="paper-title">{p.data.title}</span>
+								<span class="paper-authors">{p.data.authors}</span>
+								<span class="paper-meta">
+									{p.data.venue && <span>{p.data.venue}</span>}
+									{p.data.arxiv && <a href={`https://arxiv.org/abs/${p.data.arxiv}`} target="_blank" rel="noopener">arXiv:{p.data.arxiv}</a>}
+									{p.data.doi && <a href={`https://doi.org/${p.data.doi}`} target="_blank" rel="noopener">DOI</a>}
+									<span class="muted">{p.data.date.getFullYear()}</span>
+								</span>
+								{p.data.summary && <p class="paper-summary">{p.data.summary}</p>}
+							</li>
+						))}
+					</ol>
+				)}
+
+				{soon.length > 0 && (
+					<>
+						<h3 class="sub">In preparation</h3>
+						<ul class="paper-list plain-bullets">
+							{soon.map((p) => (
+								<li>
+									<span class="paper-title">{p.data.title}</span>
+									<span class="paper-authors">{p.data.authors}</span>
+								</li>
+							))}
+						</ul>
+					</>
+				)}
+			</>
+		)}
+	</section>
+
+	<section class="wrap block prose">
+		<h2>Ultralight dark matter, and what it does to neutrinos</h2>
+		<p class="proj-meta">With Prof. Alexei Smirnov (ICTP Trieste) and Prof. Manibrata Sen (IIT Bombay)</p>
+		<p>For dark matter masses in range of nano to pico eVs, due to large de broglie wavelength (of order of galatic lengths), we can ignore the quantum fluctuations, and treat them classically. This is generally done using Schrodinger-Poisson system, considering the DM particles interacting with gravity.
+			This gives solitons as solution to this system, which explains the core of the galaxies. In this project, I was studying what happens if you add self interaction to this dm, with quartic scalar coupling, and what are the consequences to soliton, and the halo region in which we live in. This was also connected to the work on refraction masses of neutrinos,
+			from their interaction with the DM background, which was studied by my advisors in past, and we wanted to see how the self interaction of DM changes the refraction mass, and what are the consequences to neutrino oscillations in this background over ranges of masses
+		</p>
+	</section>
+
+	<section class="wrap block prose">
+		<h2>Explanation to Anomalous 248 keV Event in LZ</h2>
+		<p class="proj-meta">With Prof. Manibrata Sen (IIT Bombay) and Prof. Bhavesh Chauhan (BITS Pilani)</p>
+		<p>This, not gonna lie, was quite sudden. One fine morning, I woke up to find a 248 keV anomaly being discussed all over the world in the context of LUX-ZEPLIN. A few days later, I was discussing with Sir how it could potentially be explained, and he introduced the idea of cosmic-ray-boosted dark matter (CRDM). That is where this project began</p> 
+		<p>We started by working out how the CRDM flux is generated, how it translates into detector-level events, and the framework needed to model the entire process, including the attenuation the boosted dark matter could experience before reaching the detector. During this process, we realised that the usual approach relies on the NREFT framework. However, since the incoming flux is relativistic in our case, this treatment is not directly appropriate. We therefore developed a hybrid approach for the spin-dependent operators, since the spin-independent operators were not giving particularly promising results. Even this approach did not give us a physically satisfactory picture, 
+			which led us to realise that the contact-interaction assumption may not be adequate in this regime and that a mediator needs to be incorporated. This forms the basis of what we have developed in V1 so far. In V2, we plan to make the treatment of attenuation more rigorous, which is currently modelled through mean energy loss, and extend the framework to consistently handle all the NREFT operators</p>
+	</section>
+
+	<section class="wrap block prose">
+		<h2>Inferring supernova physics from neutrino spectra</h2>
+		<p class="proj-meta">With Prof. Manibrata Sen (IIT Bombay)</p>
+		<p>The problem here is quite simple: Galactic supernovae, which would provide the large neutrino flux needed for detailed analysis, are rare, and consequently we have very little experimental data on supernova neutrinos. So, if we detect a nearby supernova in the future, the question is: <em>how quickly can we extract its physical properties from the neutrino spectrum?</em></p>
+		<p>There are already a large number of supernova simulation models, incorporating different progenitor properties and neutrino-physics scenarios. However, extracting these characteristics by comparing the observed spectrum against simulations one by one would be computationally expensive and potentially slow. More importantly, the simulations themselves are degenerate: different physical parameters and models can produce similar spectra, and uncertainties in the data make it difficult to identify a unique underlying model.</p>
+		<p>This motivates a different approach: instead of trying to find the single best-fit model, <strong>learn the posterior distribution of the physical parameters directly from the observed spectrum</strong>. I am building a three-stage neural posterior estimation pipeline that takes the detector-level spectra expected from DUNE and Hyper-Kamiokande and infers the underlying progenitor properties while simultaneously discriminating between discrete physics scenarios. The pipeline couples <strong>SNEWPY</strong> with the <strong>sbi</strong> framework to generate realistic detector-level spectra across a broad range of supernova models and learn the corresponding posterior distributions. Crucially, the uncertainty associated with not knowing which simulation model correctly describes nature is marginalised over, 
+			so that model uncertainty is propagated into the final posterior rather than being hidden by choosing a single simulation</p>
+	</section>
+
+	<section class="wrap block prose">
+		<h2>What effects can fluctuating solar matter can have on neutrino oscillations?</h2>
+		<p class="proj-meta">With Prof. Manibrata Sen (IIT Bombay)</p>
+		<p>Solar neutrino oscillations are normally computed through a smooth, spherically averaged density profile. The Sun is not smooth, it convects, and the electron density fluctuates. Those fluctuations might affect the flavour conversion, so the question is whether they leave a measurable fingerprint in the survival probability, or whether they average away to nothing.</p>
+		<p>I built an ensemble-averaged framework for flavour evolution in stochastic matter, treating the fluctuations first as white noise and then as Kolmogorov turbulence via the randomisation method. Comparing against <strong>Super-Kamiokande IV</strong> and <strong>SNO</strong> with a chi square fit puts a bound on how large the fluctuation amplitude can be, and the same machinery gives sensitivity projections for JUNO and DUNE. Kolmogorov one is came out to be not that effective since it sits in the convention zone of Sun which is far from the resonance region, but white noise had non-trivial effects which has been discussed in the paper</p>
+	</section>
+
+	<section class="wrap block prose">
+		<h2>Earlier on</h2>
+		<p>Before the neutrino work I spent a summer with Krittika doing an analysis of star clusters in nearby galaxies using aperture photometry on Hubble imagery, correlating flux with cluster age and ellipticity. <a class="doc-link-inline" href="/notes/summer-projects/krittika-star-clusters.pdf" target="_blank" rel="noopener">Krittika report (PDF)</a></p>
+		<p>Also did a reading project on Elementary Particle Physics in freshman year<a class="doc-link-inline" href="public/notes/summer-projects/elementary-particle-physics.pdf" target="_blank" rel="noopener">Summer of Science report (PDF)</a></p>
+		<p>A year on the <strong>IIT Bombay Rocket Team</strong> designing solid propellant motors, running Crawford Bomb Tests and pulling burn rates out of static fire data, the most hands-on work I have done ever haha, but it was really fun (and repetitve :( )</p>
+	</section>
+
+</Base>

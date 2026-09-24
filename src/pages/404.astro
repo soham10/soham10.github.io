@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+import Mascot from '../components/Mascot.astro';
+---
+
+<Base
+	title="Not found"
+	description="That page does not exist."
+	noindex={true}
+>
+
+	<header class="wrap page-head err-head">
+		<Mascot size={104} title="Soham, looking for the missing page" />
+		<div>
+			<h1 class="err-code">404</h1>
+			<p class="lede">This page went straight through the detector without interacting. Nothing was recorded.</p>
+		</div>
+	</header>
+
+	<section class="wrap block">
+		<h2>Try instead</h2>
+		<ul class="plain-links">
+			<li><a href="/">Home</a> — the terminal, and what I work on</li>
+			<li><a href="/research">Research</a> — neutrinos, solitons, star clusters</li>
+			<li><a href="/writing">Writing</a> — posts, course notes and code</li>
+			<li><a href="/beyond">Beyond</a> — quizzing, films, travel</li>
+		</ul>
+		<p class="note" style="margin-top:1.2rem">Or press <kbd>~</kbd> for the terminal — it still works out here.</p>
+	</section>
+
+</Base>

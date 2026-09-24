@@ -1,0 +1,880 @@
+/* =============================================================
+   Soham Sahasrabuddhe — personal site
+   Quiet, editorial, physics-flavoured. The terminal is the
+   playful layer on top, not the whole costume.
+   ============================================================= */
+
+/* ---------- design tokens ------------------------------------ */
+
+:root {
+  color-scheme: light;
+  --bg: #fffaf0;
+  --bg-subtle: #fdeed8;
+  --surface: #ffffff;
+  --border: #f0e3d0;
+  --border-strong: #dcc9ad;
+  --text: #1a1a22;
+  --text-muted: #6b6255;
+  --accent: #1046e8;
+  --accent-hover: #0a2fa8;
+  --accent-soft: rgba(16, 70, 232, 0.09);
+  --warm: #c93d00;
+  --warm-soft: rgba(201, 61, 0, 0.11);
+  --label: #b3187a;
+  --label-soft: rgba(179, 24, 122, 0.10);
+  --shadow: 0 1px 2px rgba(26, 20, 8, 0.05), 0 10px 26px -14px rgba(26, 20, 8, 0.2);
+  --shadow-lift: 0 2px 6px rgba(26, 20, 8, 0.07), 0 20px 44px -22px rgba(26, 20, 8, 0.3);
+
+  /* the terminal keeps its own dark palette in both themes */
+  --term-bg: #0c1119;
+  --term-bar: #131c27;
+  --term-border: #26323f;
+  --term-text: #c8d5e2;
+  --term-dim: #7d8fa3;
+  --term-accent: #5cc2ff;
+  --term-warm: #ffb454;
+  --term-green: #5ee08a;
+  --term-red: #ff6b52;
+
+  --f-display: "Space Grotesk", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --f-body: "Newsreader", Georgia, "Times New Roman", serif;
+  --f-mono: "Inter", "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --f-term: "JetBrains", SF-Regular, Menlo, Consolas;
+
+  /* The column IS the measure — one edge, no nested prose cap, so text fills
+     its column instead of stopping short inside a wider one. The vw term is
+     deliberately steep: on a desktop the page should use the screen, and a
+     line of 76–84 characters at this line-height (1.75) reads fine. The
+     classic 65–75 would force a column barely half the width of a laptop
+     screen, which is the complaint this replaced. */
+  --col: clamp(38rem, 32rem + 9vw, 42rem);
+  --col-wide: clamp(44rem, 38rem + 9vw, 48rem);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0b1020;
+    --bg-subtle: #131a2e;
+    --surface: #151d33;
+    --border: #26314d;
+    --border-strong: #3a4868;
+    --text: #e8ecf7;
+    --text-muted: #9aa6c2;
+    --accent: #6fa5ff;
+    --accent-hover: #9dc1ff;
+    --accent-soft: rgba(111, 165, 255, 0.14);
+    --warm: #ffa04d;
+    --warm-soft: rgba(255, 160, 77, 0.15);
+    --label: #ff85c0;
+    --label-soft: rgba(255, 133, 192, 0.13);
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 26px -14px rgba(0, 0, 0, 0.7);
+    --shadow-lift: 0 2px 6px rgba(0, 0, 0, 0.45), 0 20px 44px -22px rgba(0, 0, 0, 0.8);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0b1020;
+  --bg-subtle: #131a2e;
+  --surface: #151d33;
+  --border: #26314d;
+  --border-strong: #3a4868;
+  --text: #e8ecf7;
+  --text-muted: #9aa6c2;
+  --accent: #6fa5ff;
+  --accent-hover: #9dc1ff;
+  --accent-soft: rgba(111, 165, 255, 0.14);
+  --warm: #ffa04d;
+  --warm-soft: rgba(255, 160, 77, 0.15);
+  --label: #ff85c0;
+  --label-soft: rgba(255, 133, 192, 0.13);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 26px -14px rgba(0, 0, 0, 0.7);
+  --shadow-lift: 0 2px 6px rgba(0, 0, 0, 0.45), 0 20px 44px -22px rgba(0, 0, 0, 0.8);
+}
+
+/* ---------- reset & base ------------------------------------- */
+
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  /* Root type scales with the viewport, so every rem measurement — column,
+     measure, spacing, component padding — grows together on a large screen.
+     The rem term is deliberate: a pure-vw font size ignores the reader's
+     browser zoom and font-size setting, which fails WCAG 1.4.4. Media-query
+     rem units are unaffected (they always resolve against 16px), so the
+     breakpoints below stay where they are. */
+  font-size: clamp(16px, 0.9rem + 0.35vw, 20px);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--f-body);
+  font-size: 1.18rem;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+/* height:auto is not optional next to max-width — without it the width/height
+   attributes that reserve layout space are applied literally and the image
+   stretches. */
+img { max-width: 100%; height: auto; display: block; }
+button { font: inherit; color: inherit; }
+
+::selection { background: var(--accent-soft); }
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--surface);
+  color: var(--text);
+  padding: 0.6rem 1rem;
+  z-index: 200;
+  border: 1px solid var(--border);
+}
+.skip:focus { left: 0; }
+
+/* ---------- layout -------------------------------------------- */
+
+.wrap { width: 100%; max-width: var(--col); margin: 0 auto; padding: 0 1.35rem; }
+.wrap-wide { max-width: var(--col-wide); }
+
+main { padding-bottom: 4rem; }
+section.block { margin-top: 4.2rem; }
+
+/* ---------- navigation ----------------------------------------- */
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  /* Solid, not frosted. Blurred translucency is the house style of every
+     generated page on the internet; an opaque bar with one hairline reads
+     as a decision instead. */
+  background: var(--bg);
+  border-bottom: 1px solid var(--border-strong);
+}
+.nav-in {
+  max-width: var(--col-wide);
+  margin: 0 auto;
+  padding: 0.62rem 1.35rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  flex-wrap: wrap;
+}
+.brand {
+  font-family: var(--f-display);
+  font-weight: 600;
+  font-size: 0.98rem;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+.brand .logo {
+  color: var(--accent);
+  flex: none;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+.brand:hover .logo { color: var(--warm); transform: rotate(-4deg); }
+
+.nav-links { display: flex; flex-wrap: wrap; align-items: center; gap: 0.1rem 0.2rem; margin-left: auto; }
+.nav-links a {
+  position: relative;
+  font-family: var(--f-display);
+  font-size: 0.86rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-decoration: none;
+  padding: 0.3rem 0.5rem;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  left: 0.5rem;
+  right: 0.5rem;
+  bottom: 0.1rem;
+  height: 1.5px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.22s ease;
+}
+.nav-links a:hover { color: var(--text); }
+.nav-links a:hover::after { transform: scaleX(1); }
+.nav-links a[aria-current="page"] { color: var(--accent); }
+.nav-links a[aria-current="page"]::after { transform: scaleX(1); }
+
+.nav-tools { display: flex; gap: 0.35rem; }
+.icon-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+  font-family: var(--f-mono);
+  font-size: 0.76rem;
+  line-height: 1;
+}
+.icon-btn:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+.icon-btn svg { width: 15px; height: 15px; }
+.icon-btn .moon { display: none; }
+:root[data-theme="dark"] .icon-btn .moon { display: block; }
+:root[data-theme="dark"] .icon-btn .sun { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .icon-btn .moon { display: block; }
+  :root:not([data-theme="light"]) .icon-btn .sun { display: none; }
+}
+
+/* on narrow screens: brand + tools on one row, links on the next */
+@media (max-width: 40rem) {
+  .nav-in { padding: 0.45rem 0.75rem; gap: 0.25rem 0.5rem; }
+  .brand { font-size: 0.88rem; }
+  .nav-tools { order: 2; margin-left: auto; }
+  .nav-links {
+    order: 3;
+    width: 100%;
+    margin-left: -0.28rem;
+    justify-content: flex-start;
+    gap: 0.1rem 0;
+  }
+  /* Six destinations have to fit the second row without wrapping to a third:
+     the sticky bar is already two rows tall on a phone. */
+  .nav-links a { font-size: 0.74rem; padding: 0.2rem 0.28rem; letter-spacing: 0.02em; }
+  .nav-links a::after { left: 0.28rem; right: 0.28rem; }
+}
+
+/* ---------- typography ------------------------------------------ */
+
+h1, h2, h3, h4 { font-family: var(--f-display); font-weight: 600; letter-spacing: -0.02em; line-height: 1.18; }
+
+.page-head { padding-top: 3.4rem; }
+h1 {
+  font-size: clamp(2.15rem, 6vw, 3.05rem);
+  margin-bottom: 0.9rem;
+  text-wrap: balance;
+}
+.lede { font-size: 1.3rem; color: var(--text-muted); line-height: 1.6; }
+
+h2 { font-size: 1.42rem; margin-bottom: 1.1rem; text-wrap: balance; }
+h3 { font-size: 1.1rem; }
+
+p + p { margin-top: 1rem; }
+/* a subheading that follows body copy needs air above it, not just below */
+p + h3, ul + h3, ol + h3 { margin-top: 2.1rem; margin-bottom: 0.65rem; }
+
+/* the nav is sticky, so an anchored section must stop clear of it */
+[id] { scroll-margin-top: 6.5rem; }
+
+/* ---------- section jump links ------------------------------------------ */
+
+.jump {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 1.3rem;
+  margin-top: 1.6rem;
+}
+.jump a {
+  position: relative;
+  font-family: var(--f-display);
+  font-size: 0.86rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  padding: 0.2rem 0;
+}
+.jump a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.22s;
+}
+.jump a:hover { color: var(--accent); }
+.jump a:hover::after { transform: scaleX(1); }
+.jump .n {
+  font-family: var(--f-mono);
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--label);
+  margin-left: 0.3rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  .jump a::after { transition: none; }
+}
+
+a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2.5px; transition: color 0.15s; }
+a:hover { color: var(--accent-hover); text-decoration-thickness: 2px; }
+
+strong { font-weight: 600; color: var(--text); }
+sup { font-size: 0.7em; }
+
+.muted { color: var(--text-muted); }
+.small { font-size: 0.92rem; }
+.note { font-family: var(--f-mono); font-size: 0.8rem; color: var(--text-muted); }
+
+/* ---------- portrait ---------------------------------------------- */
+
+.portrait {
+  float: right;
+  width: 11.5rem;
+  margin: 0.35rem 0 1.1rem 1.8rem;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+@media (max-width: 34rem) {
+  .portrait { float: none; margin: 0 0 1.5rem; width: 9.5rem; }
+}
+
+/* ---------- callout ------------------------------------------------ */
+
+/* No box. A label, a hairline, and the list — the page separates with
+   tone and rules, not with containers. */
+.callout {
+  margin-top: 2rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--border);
+}
+.callout-title {
+  font-family: var(--f-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.6rem;
+}
+.callout ul { list-style: none; padding: 0; }
+.callout li { position: relative; padding-left: 1.2rem; margin: 0.4rem 0; font-size: 1.02rem; }
+.callout li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.72em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+/* ---------- entries ------------------------------------------------- */
+
+.entry { padding: 1.5rem 0; border-top: 1px solid var(--border); }
+.entry:first-of-type { border-top: none; padding-top: 0.35rem; }
+
+.entry-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.15rem 1.2rem;
+}
+.entry-top h3 { flex: 1 1 19rem; }
+.when {
+  font-family: var(--f-mono);
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.org { color: var(--text-muted); font-style: italic; font-size: 1rem; margin-top: 0.2rem; }
+.entry ul { list-style: none; padding: 0; margin-top: 0.7rem; }
+.entry li { position: relative; padding-left: 1.2rem; margin: 0.45rem 0; font-size: 1.08rem; }
+.entry li::before { content: "\25B8"; position: absolute; left: 0; top: 0; color: var(--accent); font-size: 0.82em; line-height: 1.95; }
+.doc-link { display: inline-block; margin-top: 0.7rem; font-family: var(--f-mono); font-size: 0.8rem; }
+
+.badge {
+  display: inline-block;
+  font-family: var(--f-mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--warm);
+  vertical-align: 0.18em;
+  margin-left: 0.55rem;
+  white-space: nowrap;
+}
+
+/* ---------- timeline / data lists ------------------------------------ */
+
+.timeline { list-style: none; padding: 0; }
+.timeline li {
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  gap: 1rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px dashed var(--border);
+  font-size: 1.04rem;
+}
+.timeline li:last-child { border-bottom: none; }
+.timeline .y {
+  font-family: var(--f-mono);
+  font-size: 0.8rem;
+  color: var(--accent);
+  padding-top: 0.28rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* plain link list — used on the 404 recovery page */
+.plain-links { list-style: none; padding: 0; }
+.plain-links li {
+  padding: 0.5rem 0;
+  border-bottom: 1px dashed var(--border);
+  font-size: 1.04rem;
+  color: var(--text-muted);
+}
+.plain-links li:last-child { border-bottom: none; }
+.plain-links a { font-weight: 500; }
+
+.dl { display: grid; grid-template-columns: minmax(5.5rem, 7rem) 1fr; gap: 0.75rem 1.4rem; align-items: start; }
+.dl dt {
+  font-family: var(--f-mono);
+  font-size: 0.71rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding-top: 0.42rem;
+}
+.dl dd { margin: 0; }
+@media (max-width: 32rem) {
+  .dl { grid-template-columns: 1fr; gap: 0.15rem; }
+  .dl dd { margin-bottom: 0.9rem; }
+}
+
+.chips { display: flex; flex-wrap: wrap; gap: 0.1rem 0.45rem; }
+.chip {
+  font-family: var(--f-mono);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+  transition: color 0.15s;
+}
+.chip:not(:last-child)::after { content: " ·"; color: var(--border-strong); }
+.chip:hover { color: var(--accent); }
+
+table.plain { width: 100%; border-collapse: collapse; font-size: 1.02rem; }
+table.plain td { padding: 0.7rem 1rem 0.7rem 0; border-bottom: 1px solid var(--border); vertical-align: top; }
+table.plain tr:last-child td { border-bottom: none; }
+table.plain td.yr {
+  font-family: var(--f-mono);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- empty states ------------------------------------------------ */
+
+/* A thin section is allowed to be thin. These say plainly that nothing is
+   here yet rather than dressing the gap up with placeholder cards. */
+.empty {
+  color: var(--text-muted);
+  font-style: italic;
+  font-size: 1.05rem;
+
+}
+/* mascot sits beside the message, not above it — the words stay the point */
+.empty-row { display: flex; align-items: flex-start; gap: 1.1rem; }
+.empty-row .mascot { flex: none; color: var(--text); }
+.empty-row .empty { margin: 0; }
+@media (max-width: 30rem) {
+  .empty-row { gap: 0.85rem; }
+  .empty-row .mascot { width: 46px; height: 46px; }
+}
+
+.empty code {
+  font-family: var(--f-mono);
+  font-size: 0.85em;
+  font-style: normal;
+  color: var(--text);
+}
+
+/* ---------- photo strip ---------------------------------------------------- */
+
+/* Scrolls only when the reader pushes it. No autoplay, no fade masks —
+   a carousel that moves on its own is a carousel nobody can read. */
+.gallery {
+  display: flex;
+  gap: 0.9rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  padding: 0.2rem 0 1rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+.gallery:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 4px; }
+.gallery::-webkit-scrollbar { height: 8px; }
+.gallery::-webkit-scrollbar-track { background: var(--bg-subtle); border-radius: 4px; }
+.gallery::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
+.gallery::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+.shot { flex: none; width: 17rem; margin: 0; scroll-snap-align: start; }
+.shot img {
+  width: 100%;
+  height: 12rem;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg-subtle);
+}
+.shot-tall { width: 10.5rem; }
+.shot figcaption {
+  margin-top: 0.5rem;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+.gallery-hint { margin-top: -0.4rem; }
+
+@media (max-width: 34rem) {
+  .shot { width: 14rem; }
+  .shot-tall { width: 9rem; }
+  .shot img { height: 10.5rem; }
+}
+
+/* ---------- papers ---------------------------------------------------------- */
+
+.paper-list { list-style: decimal; padding-left: 1.5rem; margin-top: 1rem; }
+.paper-list.plain-bullets { list-style: none; padding-left: 0; }
+.paper-list li { margin-bottom: 1.1rem; padding-left: 0.2rem; }
+.paper-list.plain-bullets li { padding-left: 1.2rem; position: relative; }
+.paper-list.plain-bullets li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: var(--text-muted);
+}
+.paper-title { display: block; font-weight: 600; color: var(--text); }
+.paper-authors { display: block; color: var(--text-muted); font-size: 1rem; font-style: italic; }
+.paper-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 0.9rem;
+  margin-top: 0.25rem;
+  font-family: var(--f-mono);
+  font-size: 0.8rem;
+}
+.paper-summary { margin-top: 0.5rem; font-size: 1.04rem; color: var(--text-muted); }
+
+h3.sub {
+  margin-top: 2rem;
+  font-size: 0.78rem;
+  font-family: var(--f-mono);
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* project meta line under a research heading */
+.proj-meta {
+  font-family: var(--f-mono);
+  font-size: 0.79rem;
+  color: var(--text-muted);
+  margin-top: -0.6rem;
+  margin-bottom: 1.1rem;
+}
+.doc-link-inline { font-family: var(--f-mono); font-size: 0.82rem; white-space: nowrap; }
+
+/* ---------- notes ------------------------------------------------------------ */
+
+/* A course name groups notes; it is a category marker, not a title, so it
+   takes the system's label idiom. Without this it renders at the same size
+   and weight as the note titles under it and the grouping disappears. */
+.note-group + .note-group { margin-top: 2.4rem; }
+.note-group h3 {
+  font-family: var(--f-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--label);
+  margin: 0 0 0.5rem;
+}
+.note-blurb { margin: -0.1rem 0 0.75rem; font-size: 0.98rem; }
+.note-list { list-style: none; padding: 0; }
+.note-list li { padding: 1rem 0; border-top: 1px solid var(--border); }
+.note-list li:first-child { border-top: none; }
+
+/* a secondary link riding at the end of a description, e.g. "report ↗" */
+.aside-link {
+  font-family: var(--f-mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+/* ---------- labelled resource list (beyond) ------------------------------ */
+
+.list-intro { font-size: 1rem; margin-bottom: 0.9rem; }
+.kit { list-style: none; padding: 0; margin: 0; }
+.kit li {
+  display: grid;
+  grid-template-columns: 7.5rem 1fr;
+  gap: 1rem;
+  padding: 0.85rem 0;
+  border-top: 1px solid var(--border);
+  font-size: 1.02rem;
+}
+.kit li:first-child { border-top: none; padding-top: 0; }
+.kit .k {
+  font-family: var(--f-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--label);
+  padding-top: 0.32rem;
+}
+.kit li > span + span { min-width: 0; overflow-wrap: anywhere; }
+.kit-chips { margin-top: 0.4rem; }
+.nums { font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* A long run of titles. Works are set in italic serif, the way a title is set
+   anywhere else in print — the separators are what make it scan as a list, so
+   they carry the divider tone and the titles keep full text colour. */
+.picks {
+  font-size: 1.06rem;
+  line-height: 1.95;
+
+  text-wrap: pretty;
+}
+.picks cite { font-style: italic; color: var(--text); }
+.picks .sep { color: var(--text-muted); font-style: normal; }
+
+@media (max-width: 34rem) {
+  .kit li { grid-template-columns: 1fr; gap: 0.25rem; }
+  .kit .k { padding-top: 0; }
+}
+
+/* ---------- post & publication lists ------------------------------------- */
+
+.post-list { list-style: none; padding: 0; }
+.post-list li {
+  padding: 0.55rem 0;
+  border-bottom: 1px dashed var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.2rem 1rem;
+}
+.post-list li:last-child { border-bottom: none; }
+.post-list time { font-family: var(--f-mono); font-size: 0.76rem; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+
+.post-list-full li { display: block; padding: 1.15rem 0; }
+.post-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.15rem 1rem;
+}
+.post-head a, .post-title-plain {
+  font-family: var(--f-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  flex: 1 1 18rem;
+}
+.post-title-plain { color: var(--text); }
+.post-desc { color: var(--text-muted); font-size: 1.02rem; margin-top: 0.25rem; }
+
+.pub-list { list-style: none; padding: 0; }
+.pub-list li { padding: 1.3rem 0; border-top: 1px solid var(--border); }
+.pub-list li:first-child { border-top: none; padding-top: 0.35rem; }
+.pub-summary { margin-top: 0.4rem; font-size: 1.05rem; }
+.pub-meta {
+  margin-top: 0.55rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  align-items: center;
+  font-family: var(--f-mono);
+  font-size: 0.8rem;
+}
+.pub-meta .badge { margin-left: 0; }
+
+/* ---------- markdown post body -------------------------------------------- */
+
+.post-body h2 { font-size: 1.3rem; margin-top: 2.4rem; }
+.post-body h3 { margin-top: 1.8rem; }
+.post-body p { margin-top: 1rem; }
+.post-body ul, .post-body ol { margin: 1rem 0 1rem 1.3rem; }
+.post-body li { margin: 0.35rem 0; }
+.post-body img { border-radius: 10px; border: 1px solid var(--border); margin: 1.6rem 0; }
+.post-body blockquote {
+  margin: 1.6rem 0;
+  padding: 0.2rem 0 0.2rem 1.2rem;
+  border-left: 1px solid var(--border-strong);
+  color: var(--text-muted);
+  font-style: italic;
+}
+.post-body :not(pre) > code {
+  font-family: var(--f-mono);
+  font-size: 0.88em;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.08rem 0.35rem;
+}
+.post-body pre {
+  margin: 1.6rem 0;
+  padding: 1rem 1.1rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  overflow-x: auto;
+  font-size: 0.88rem;
+  line-height: 1.65;
+}
+.post-body hr { border: none; border-top: 1px solid var(--border); margin: 2.4rem 0; }
+
+/* ---------- contact ---------------------------------------------------- */
+
+.contact-list { list-style: none; padding: 0; }
+.contact-list li {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr;
+  gap: 0.9rem;
+  padding: 0.42rem 0;
+  border-bottom: 1px dashed var(--border);
+  font-size: 1.02rem;
+}
+.contact-list .k {
+  font-family: var(--f-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--label);
+  padding-top: 0.34rem;
+}
+/* A grid item will not shrink below its content unless told to, and the
+   full email address is wider than a phone. */
+.contact-list li > span + span { min-width: 0; overflow-wrap: anywhere; }
+
+@media (max-width: 26rem) {
+  .contact-list li { grid-template-columns: 1fr; gap: 0.1rem; padding: 0.5rem 0; }
+  .contact-list .k { padding-top: 0; }
+}
+
+form.contact { margin-top: 1.6rem; display: grid; gap: 0.9rem; grid-template-columns: 1fr 1fr; }
+form.contact .full { grid-column: 1 / -1; }
+form.contact label {
+  display: block;
+  font-family: var(--f-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.35rem;
+}
+form.contact input, form.contact textarea {
+  width: 100%;
+  font-family: var(--f-body);
+  font-size: 1.02rem;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 0.6rem 0.75rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+form.contact input:focus, form.contact textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.btn {
+  justify-self: start;
+  font-family: var(--f-display);
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--bg);
+  background: var(--text);
+  border: 1px solid var(--text);
+  border-radius: 8px;
+  padding: 0.6rem 1.4rem;
+  cursor: pointer;
+  transition: transform 0.15s, background 0.15s, box-shadow 0.15s;
+}
+.btn:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow);
+}
+@media (max-width: 34rem) { form.contact { grid-template-columns: 1fr; } }
+
+/* ---------- footer ------------------------------------------------------ */
+
+.foot {
+  border-top: 1px solid var(--border);
+  margin-top: 4.5rem;
+  padding: 1.5rem 0 3rem;
+  font-family: var(--f-mono);
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  justify-content: space-between;
+}
+.foot a { color: var(--text-muted); }
+.foot a:hover { color: var(--accent); }
+
+/* ---------- touch targets ------------------------------------------------ */
+
+/* Coarse pointers get comfortably larger controls. Sized so adjacent hit
+   areas never overlap — ambiguous taps are worse than small ones — and kept
+   modest so the sticky nav does not eat the top of a phone screen. */
+@media (pointer: coarse) {
+  .icon-btn { width: 2.5rem; height: 2.5rem; }
+  .nav-tools { gap: 0.5rem; }
+  .nav-links a { padding-top: 0.45rem; padding-bottom: 0.45rem; }
+  .foot a, .contact-list a { display: inline-block; padding: 0.25rem 0; }
+  /* 27 handle links in a row need a thumb-sized box, not a text baseline */
+  .chips a { display: inline-block; padding: 0.3rem 0; }
+  .chips { gap: 0.1rem 0.6rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}

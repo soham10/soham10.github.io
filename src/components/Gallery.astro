@@ -1,0 +1,27 @@
+---
+import { gallery } from '../data/gallery';
+import Mascot from './Mascot.astro';
+---
+
+{gallery.length === 0 ? (
+	<div class="empty-row">
+		<Mascot size={64} title="Soham, with no photos up yet" />
+		<p class="empty">
+			No photos up yet. Drop images into <code>public/images/gallery/</code> and add a
+			line each to <code>src/data/gallery.ts</code> — they appear here in the order listed,
+			and the strip scrolls as soon as there is more than a screenful.
+		</p>
+	</div>
+) : (
+	<>
+		<div class="gallery" tabindex="0" role="group" aria-label="Photographs, scroll sideways to see more">
+			{gallery.map((shot) => (
+				<figure class={`shot${shot.portrait ? ' shot-tall' : ''}`}>
+					<img src={shot.src} alt={shot.alt} loading="lazy" decoding="async" />
+					{shot.caption && <figcaption>{shot.caption}</figcaption>}
+				</figure>
+			))}
+		</div>
+		<p class="note gallery-hint">scroll sideways &rarr;</p>
+	</>
+)}
