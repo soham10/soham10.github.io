@@ -122,49 +122,76 @@
 
 	function warpTo(url) {
 		if (reduced) { window.location.href = url; return; }
+
+		var W = window.innerWidth, H = window.innerHeight;
+		// The warp is motion blur — resolution buys nothing here, and a retina or
+		// 4K backing store is the single most expensive thing per frame, since
+		// every frame repaints the whole canvas. Draw at 1x whatever the screen is.
 		var c = document.createElement('canvas');
 		c.className = 'warp';
 		c.setAttribute('aria-hidden', 'true');
-		var dpr = window.devicePixelRatio || 1;
-		var W = window.innerWidth, H = window.innerHeight;
-		c.width = W * dpr;
-		c.height = H * dpr;
+		c.width = W;
+		c.height = H;
 		document.body.appendChild(c);
 		var x = c.getContext('2d');
-		x.scale(dpr, dpr);
+
 		var cs = getComputedStyle(document.documentElement);
-		var bg = cs.getPropertyValue('--bg').trim() || '#0e131b';
-		var accent = cs.getPropertyValue('--accent').trim() || '#5cb8ee';
-		var warm = cs.getPropertyValue('--warm').trim() || '#ffb454';
-		var cx = W / 2, cy = H / 2;
-		var stars = [];
-		for (var i = 0; i < 150; i++) {
-			stars.push({ a: Math.random() * Math.PI * 2, d: 12 + Math.random() * Math.max(W, H) * 0.45 });
+		var bg = cs.getPropertyValue('--bg').trim() || '#0b1020';
+		var accent = cs.getPropertyValue('--accent').trim() || '#6fa5ff';
+		var warm = cs.getPropertyValue('--warm').trim() || '#ffa04d';
+
+		var cx = W / 2, cy = H / 2, MAX = Math.max(W, H);
+
+		// Star count follows the viewport area, so a phone does not do a
+		// desktop's worth of work for a streak field nobody counts.
+		var N = Math.max(60, Math.min(150, Math.round(W * H / 11000)));
+		var EVERY = 7;
+
+		// Each star's angle never changes, so its sine and cosine are computed
+		// once here rather than twice per star on every frame.
+		var cos = new Float32Array(N), sin = new Float32Array(N), dist = new Float32Array(N);
+		for (var i = 0; i < N; i++) {
+			var ang = Math.random() * Math.PI * 2;
+			cos[i] = Math.cos(ang);
+			sin[i] = Math.sin(ang);
+			dist[i] = 12 + Math.random() * MAX * 0.45;
 		}
+
 		blip(180, 0.4, 'sawtooth', 0.07);
-		var t0 = performance.now(), dur = 480, jumped = false;
+		var t0 = performance.now(), dur = 340, jumped = false;
 		var go = function () { if (!jumped) { jumped = true; window.location.href = url; } };
 		// if rAF stalls (tab hidden mid-click) navigate anyway rather than hang
 		setTimeout(go, dur + 250);
+
 		(function frame(now) {
-			var t = Math.min((now - t0) / dur, 1);
+			var t = (now - t0) / dur;
+			if (t > 1) t = 1;
+
 			x.globalAlpha = 0.22 + t * 0.35;
 			x.fillStyle = bg;
 			x.fillRect(0, 0, W, H);
-			x.globalAlpha = 1;
+
+			// Alpha and line width are the same for every streak, so they are set
+			// once; the two colours become two batched paths. 150 stroke() calls a
+			// frame plus 300 context state changes became 2 and 4.
+			x.globalAlpha = 0.28 + t * 0.6;
 			x.lineWidth = 1.3;
-			for (var k = 0; k < stars.length; k++) {
-				var st = stars[k];
-				var sp = (2 + st.d * 0.018) * (1 + t * 24);
-				var d2 = st.d + sp;
-				x.strokeStyle = (k % 7 === 0) ? warm : accent;
-				x.globalAlpha = 0.28 + t * 0.6;
+			var grow = 1 + t * 24;
+
+			for (var pass = 0; pass < 2; pass++) {
+				x.strokeStyle = pass ? warm : accent;
 				x.beginPath();
-				x.moveTo(cx + Math.cos(st.a) * st.d, cy + Math.sin(st.a) * st.d);
-				x.lineTo(cx + Math.cos(st.a) * d2, cy + Math.sin(st.a) * d2);
+				for (var k = 0; k < N; k++) {
+					if ((k % EVERY === 0) !== (pass === 1)) continue;
+					var d1 = dist[k];
+					var d2 = d1 + (2 + d1 * 0.018) * grow;
+					x.moveTo(cx + cos[k] * d1, cy + sin[k] * d1);
+					x.lineTo(cx + cos[k] * d2, cy + sin[k] * d2);
+					dist[k] = d2 > MAX ? Math.random() * 50 : d2;
+				}
 				x.stroke();
-				st.d = d2 > Math.max(W, H) ? Math.random() * 50 : d2;
 			}
+
 			x.globalAlpha = 1;
 			if (t < 1) requestAnimationFrame(frame);
 			else go();

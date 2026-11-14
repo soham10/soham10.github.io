@@ -7,6 +7,14 @@ import { defineConfig } from 'astro/config';
 export default defineConfig({
 	site: 'https://soham10.github.io',
 	trailingSlash: 'ignore',
+	// The warp runs for 480ms and only then sets location.href, so without
+	// this the fetch for the next page starts after the animation instead of
+	// during it. Hovering a link now warms the HTML, so the jump at the end
+	// lands on an already-cached page.
+	prefetch: {
+		prefetchAll: true,
+		defaultStrategy: 'hover',
+	},
 	// /notes was its own page until 2026-09-24, when it was folded into
 	// /writing. The note PDFs still live at /notes/<course>/<file>.pdf, so only
 	// the index moves; this keeps any link to the old page working.
