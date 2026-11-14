@@ -20,8 +20,20 @@ export interface Shot {
 }
 
 export const gallery: Shot[] = [
-	{ src: '/images/gallery/main_building.png', alt: 'IITB Main Building', caption: 'Annoying yet beautiful Main Building' },
-	// { src: '/images/gallery/inter-iit.jpg', alt: 'The quiz team holding a trophy', caption: 'Inter IIT, Patna' },
-	// { src: '/images/gallery/pondicherry.jpg', alt: 'A street in Pondicherry', portrait: true, caption: 'Pondicherry' },
+	{ src: '/images/gallery/main_building.png', alt: 'IITB Main Building'},
+	{ src: '/images/gallery/1.jpeg', alt: 'random 1'},
+	{ src: '/images/gallery/2.jpeg', alt: 'random 2'},
+	{ src: '/images/gallery/3.jpeg', alt: 'random 3'},
+	{ src: '/images/gallery/4.jpeg', alt: 'random 4'},
+	{ src: '/images/gallery/5.jpeg', alt: 'random 5'},
+	{ src: '/images/gallery/6.jpeg', alt: 'random 6'},
+	{ src: '/images/gallery/7.jpeg', alt: 'random 7'},
+	{ src: '/images/gallery/8.jpeg', alt: 'random 8'},
+	{ src: '/images/gallery/9.jpeg', alt: 'random 9'},
+	{ src: '/images/gallery/10.jpeg', alt: 'random 10'},
+	{ src: '/images/gallery/11.jpeg', alt: 'random 11'},
+	{ src: '/images/gallery/12.jpeg', alt: 'random 12'},
+	{ src: '/images/gallery/13.jpeg', alt: 'random 13'},
+	{ src: '/images/gallery/14.jpeg', alt: 'random 14'}
 ];
 
