@@ -768,6 +768,63 @@ h3.sub {
 
 /* ---------- contact ---------------------------------------------------- */
 
+/* Details left, map right. Collapses before the contact list's own label
+   column would get squeezed, so the email never wraps mid-address. */
+.contact-split {
+  margin-top: 1.2rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 1.6rem;
+  align-items: stretch;
+}
+/* Half the column is too narrow for a 32-character address beside a 5.5rem
+   label, so inside the split the key sits above its value instead — the same
+   shape the list already takes on a phone. */
+.contact-split .contact-list li {
+  grid-template-columns: 1fr;
+  gap: 0.1rem;
+  padding: 0.5rem 0;
+}
+.contact-split .contact-list .k { padding-top: 0; }
+@media (max-width: 48rem) {
+  .contact-split { grid-template-columns: 1fr; gap: 1.8rem; }
+}
+
+/* A map is a discrete object set on the page, so it takes a frame and the
+   resting-object shadow — the same treatment as the portrait. It stretches to
+   the height of the details beside it rather than floating at a fixed size. */
+.map { margin: 0; display: flex; flex-direction: column; }
+.map iframe {
+  display: block;
+  width: 100%;
+  flex: 1;
+  min-height: 15rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  background: var(--bg-subtle);
+}
+.map figcaption {
+  margin-top: 0.55rem;
+  font-family: var(--f-mono);
+  font-size: 0.73rem;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+.map figcaption a { color: inherit; text-decoration: none; border-bottom: 1px solid transparent; }
+.map figcaption a:hover { color: var(--accent); border-bottom-color: currentColor; }
+
+/* Google renders the tiles light in every theme; without this it is a white
+   slab on a deep navy page. The filter darkens it to sit with the rest. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .map iframe {
+    filter: invert(91%) hue-rotate(180deg) saturate(0.78) contrast(0.92);
+  }
+}
+:root[data-theme="dark"] .map iframe {
+  filter: invert(91%) hue-rotate(180deg) saturate(0.78) contrast(0.92);
+}
+
 .contact-list { list-style: none; padding: 0; }
 .contact-list li {
   display: grid;
